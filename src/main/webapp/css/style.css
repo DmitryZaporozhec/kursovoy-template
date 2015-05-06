@@ -1,0 +1,11 @@
+.left {
+    float: left;
+}
+.clear {
+    clear: both;
+}
+
+.userRow {
+    margin: 5px 5px 5px 5px;
+    background-color: #3d3d3d;
+}
