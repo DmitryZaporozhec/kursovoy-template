@@ -1,15 +1,20 @@
 package kursovoy.model;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class User {
 	private String firstName;
 	private String lastName;
-	private int age;
+	private String age;
 
-	public String getFirstName() {
+    public User() {
+    }
+
+    public String getFirstName() {
 		return firstName;
 	}
 
-	public User(String firstName, String lastName, int age) {
+	public User(String firstName, String lastName, String age) {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
@@ -28,11 +33,20 @@ public class User {
 		this.lastName = lastName;
 	}
 
-	public int getAge() {
+	public String getAge() {
 		return age;
 	}
 
-	public void setAge(int age) {
+	public void setAge(String age) {
 		this.age = age;
 	}
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", age=" + age +
+                '}';
+    }
 }
