@@ -1,5 +1,6 @@
 package kursovoy.mvc;
 
+import kursovoy.jdbc.JDBCUtil;
 import kursovoy.model.User;
 
 import org.apache.tomcat.util.codec.binary.StringUtils;
@@ -19,24 +20,25 @@ public class IndexController {
 
     @RequestMapping(value = "/userList", method = RequestMethod.GET)
     public String get(Model model) {
+
+        JDBCUtil jdbcUtil = new JDBCUtil();
+        List<User> allUsers = jdbcUtil.getAllUsers();
         //Get all users
-        List<User> userList = new ArrayList<User>();
-        for (int i = 0; i < 10; i++) {
-            userList.add(new User("Dmitry", "Zaporozhec", "22"));
-        }
-        model.addAttribute("users", userList);
+        model.addAttribute("users", allUsers);
         return "users";
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
     public String getUser(Model model) {
-        model.addAttribute("CURRENT_TIME",new Date());
+        model.addAttribute("CURRENT_TIME", new Date());
         return "user";
     }
 
     @RequestMapping(value = "/user", method = RequestMethod.POST)
-    public @ResponseBody String save(final HttpServletRequest request,
-                       final HttpServletResponse response, final @RequestBody User u) {
+    public
+    @ResponseBody
+    String save(final HttpServletRequest request,
+                final HttpServletResponse response, final @RequestBody User u) {
         System.out.println(u);
         return "User Saved!";
     }
