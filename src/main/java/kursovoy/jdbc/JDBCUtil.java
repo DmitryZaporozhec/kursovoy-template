@@ -21,9 +21,7 @@ public class JDBCUtil {
         Statement stmt = null;
         try {
             Class.forName(jdbcDriver);
-            System.out.println("Connecting to database...");
             conn = DriverManager.getConnection(connectionString, userName, password);
-            System.out.println("Creating statement...");
             stmt = conn.createStatement();
             String sql;
             sql = "SELECT * FROM USERS";
@@ -31,30 +29,64 @@ public class JDBCUtil {
             while (rs.next()) {
                 userList.add(new User(rs.getInt("USER_ID"), rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"), rs.getInt("AGE")));
             }
-            //STEP 6: Clean-up environment
             rs.close();
             stmt.close();
             conn.close();
         } catch (SQLException se) {
-            //Handle errors for JDBC
             se.printStackTrace();
         } catch (Exception e) {
-            //Handle errors for Class.forName
             e.printStackTrace();
         } finally {
-            //finally block used to close resources
             try {
                 if (stmt != null)
                     stmt.close();
             } catch (SQLException se2) {
-            }// nothing we can do
-            try {
-                if (conn != null)
-                    conn.close();
-            } catch (SQLException se) {
-                se.printStackTrace();
-            }//end finally try
+                try {
+                    if (conn != null)
+                        conn.close();
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }
+            }
+            return userList;
         }
-        return userList;
+    }
+
+
+    public List<User> getUser(String userId) {
+        List<User> userList = new ArrayList<User>();
+        Connection conn = null;
+        Statement stmt = null;
+        try {
+            Class.forName(jdbcDriver);
+            conn = DriverManager.getConnection(connectionString, userName, password);
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT * FROM USERS WHERE USER_ID='" + userId + "'";
+            ResultSet rs = stmt.executeQuery(sql);
+            while (rs.next()) {
+                userList.add(new User(rs.getInt("USER_ID"), rs.getString("FIRST_NAME"), rs.getString("LAST_NAME"), rs.getInt("AGE")));
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (SQLException se2) {
+                try {
+                    if (conn != null)
+                        conn.close();
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }
+            }
+            return userList;
+        }
     }
 }

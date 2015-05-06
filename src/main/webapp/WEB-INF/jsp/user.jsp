@@ -8,9 +8,9 @@
     <script language="javascript" src="/js/user.js" type="text/javascript"></script>
 </head>
 <body>
-<input id="name" type="text">
-<input id="lastName" type="text">
-<input id="age" type="number">
+<input id="name" type="text" value="${user.firstName}">
+<input id="lastName" type="text" value="${user.lastName}">
+<input id="age" type="number" value="${user.age}">
 <input id="submit" type="button" value="Submit">
 </body>
 </html>
