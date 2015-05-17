@@ -9,3 +9,7 @@
     margin: 5px 5px 5px 5px;
     background-color: #afafa2;
 }
+
+.container-login{
+    width:225px !important;
+}

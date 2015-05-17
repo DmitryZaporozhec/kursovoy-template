@@ -2,7 +2,9 @@
  * Created by zaporozhec on 4/30/15.
  */
 $(document).ready(function () {
-    $("#submit").on("click", function () {
+
+    $("#edit-user-form").on("submit", function () {
+        $(".alert").hide();
         $.ajax({
             url: "/user",
             type: "POST",
@@ -10,16 +12,25 @@ $(document).ready(function () {
             contentType: "application/json",
             data: toJson(),
             success: function (data, status, jqXHR) {
-                alert("Success! " + data);
+                $(".alert-success").show()
+                location.reload(true);
             },
             error: function (data) {
-                alert("Error! " + data);
+                $(".alert-error").show()
             }
         });
+        return false;
     });
 });
 
 function toJson() {
-    return JSON.stringify({firstName: $("#name").val(), lastName: $("#lastName").val(), age: $("#age").val()});
+    return JSON.stringify({
+        login: $("#login").val(),
+        password: $("#password").val(),
+        userId: $("#userId").val(),
+        firstName: $("#name").val(),
+        lastName: $("#lastName").val(),
+        age: $("#age").val()
+    });
 
 }
