@@ -1,6 +1,7 @@
 package kursovoy.filter;
 
-import kursovoy.jdbc.JDBCUtil;
+import kursovoy.jdbc.AbstractDao;
+import kursovoy.jdbc.UserDao;
 import kursovoy.model.User;
 import org.springframework.util.CollectionUtils;
 
@@ -13,13 +14,19 @@ import java.util.List;
 
 public final class KursovoyFilter implements Filter {
     private FilterConfig filterConfig = null;
-    final static String MY_COOKIE_NAME = "KursovoiCookie";
+    final static String AUTH_KEY = "AUTH_KEY";
+    final static String INFO_KEY = "INFO_KEY";
+    final static UserDao util = new UserDao();
 
     public void init(FilterConfig filterConfig)
             throws ServletException {
         this.filterConfig = filterConfig;
     }
-
+    // known cookie
+    // fail count
+    // IP history
+    // Trust IP list
+    // last login time
     public void destroy() {
         this.filterConfig = null;
     }
@@ -66,10 +73,9 @@ public final class KursovoyFilter implements Filter {
         Cookie[] cookie = request.getCookies();
         if (cookie != null) {
             for (Cookie cook : cookie) {
-                if (MY_COOKIE_NAME.equals(cook.getName())) {
+                if (AUTH_KEY.equals(cook.getName())) {
                     String value = cook.getValue();
-                    JDBCUtil util = new JDBCUtil();
-                    List<User> userLIst = util.getUser(value);
+                    List<User> userLIst = util.getRecordById(value);
                     if (!CollectionUtils.isEmpty(userLIst)) {
                         result = userLIst.get(0);
                         break;
@@ -84,7 +90,7 @@ public final class KursovoyFilter implements Filter {
         User u = this.getCurrentUser(request);
         if (u != null) {
             request.setAttribute("HEADER_USER_NAME", u.getFirstName() + " " + u.getLastName());
-            request.setAttribute("CURRENT_USER_ID", u.getUserId());
+            request.setAttribute("CURRENT_USER_ID", u.getId());
         }
     }
 
@@ -93,10 +99,9 @@ public final class KursovoyFilter implements Filter {
         Cookie[] cookie = request.getCookies();
         if (cookie != null) {
             for (Cookie cook : cookie) {
-                if (MY_COOKIE_NAME.equals(cook.getName())) {
+                if (AUTH_KEY.equals(cook.getName())) {
                     String value = cook.getValue();
-                    JDBCUtil util = new JDBCUtil();
-                    List<User> userLIst = util.getUser(value);
+                    List<User> userLIst = util.getRecordById(value);
                     if (!CollectionUtils.isEmpty(userLIst)) {
                         result = true;
                         break;

@@ -27,7 +27,7 @@
 
         <label>Login</label>
         <input id="login" type="text" value="${user.login}">
-        <input id="userId" type="hidden" value="${user.userId}">
+        <input id="userId" type="hidden" value="${user.id}">
         <label>First Name</label>
         <input id="name" type="text" value="${user.firstName}">
         <label>Last Name</label>
@@ -37,7 +37,7 @@
         <label>Password</label>
         <input id="password" type="password" value="${user.password}">
         <button type="submit" class="btn">Submit</button>
-        <a class="btn btn-danger" href="/delete?userId=${user.userId}">Delete</a>
+        <a class="btn btn-danger" href="/delete?userId=${user.id}">Delete</a>
     </fieldset>
 </form>
 

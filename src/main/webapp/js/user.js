@@ -27,7 +27,7 @@ function toJson() {
     return JSON.stringify({
         login: $("#login").val(),
         password: $("#password").val(),
-        userId: $("#userId").val(),
+        id: $("#userId").val(),
         firstName: $("#name").val(),
         lastName: $("#lastName").val(),
         age: $("#age").val()

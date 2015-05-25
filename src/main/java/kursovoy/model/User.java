@@ -1,13 +1,21 @@
 package kursovoy.model;
 
 
-public class User {
-    private int userId;
+import kursovoy.model.constants.UserStatus;
+
+import java.util.*;
+
+public class User extends AbstractModel {
     private String firstName;
     private String lastName;
     private int age;
     private String login;
     private String password;
+    private UserStatus status;
+    private long failLoginCount;
+    private Date lastLogin;
+    private List<UserIpHistory> userIpHistoryList;
+
 
     public User() {
     }
@@ -17,18 +25,10 @@ public class User {
     }
 
     public User(int userId, String firstName, String lastName, int age) {
-        this.userId = userId;
+        this.id = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.age = age;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(int userId) {
-        this.userId = userId;
     }
 
     public void setFirstName(String firstName) {
@@ -65,5 +65,37 @@ public class User {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public UserStatus getStatus() {
+        return status;
+    }
+
+    public void setStatus(UserStatus status) {
+        this.status = status;
+    }
+
+    public long getFailLoginCount() {
+        return failLoginCount;
+    }
+
+    public void setFailLoginCount(long failLoginCount) {
+        this.failLoginCount = failLoginCount;
+    }
+
+    public Date getLastLogin() {
+        return lastLogin;
+    }
+
+    public void setLastLogin(Date lastLogin) {
+        this.lastLogin = lastLogin;
+    }
+
+    public List<UserIpHistory> getUserIpHistoryList() {
+        return userIpHistoryList;
+    }
+
+    public void setUserIpHistoryList(List<UserIpHistory> userIpHistoryList) {
+        this.userIpHistoryList = userIpHistoryList;
     }
 }
