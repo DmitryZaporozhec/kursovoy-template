@@ -32,6 +32,8 @@
         <input id="name" type="text" value="${user.firstName}">
         <label>Last Name</label>
         <input id="lastName" type="text" value="${user.lastName}">
+        <label>Phone</label>
+        <input id="phone" type="text" value="${user.phone}">
         <label>Age</label>
         <input id="age" type="number" value="${user.age}">
         <label>Password</label>

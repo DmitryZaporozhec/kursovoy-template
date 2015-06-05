@@ -3,20 +3,21 @@
  */
 $(document).ready(function () {
 
-    $("#edit-user-form").on("submit", function () {
-        $(".alert").hide();
+    $("#doSmsAuth").on("submit", function () {
+        $("#error").hide();
         $.ajax({
-            url: "/user",
+            url: "/sms-auth",
             type: "POST",
             dataType: "text",
             contentType: "application/json",
             data: toJson(),
             success: function (data, status, jqXHR) {
-                $(".alert-success").show()
-                location.reload(true);
+                document.location.href = data;
             },
             error: function (data) {
-                $(".alert-error").show()
+                $("#error").show();
+                $("#error").text("");
+                $("#error").text(data.responseText);
             }
         });
         return false;
@@ -26,12 +27,7 @@ $(document).ready(function () {
 function toJson() {
     return JSON.stringify({
         login: $("#login").val(),
-        password: $("#password").val(),
-        id: $("#userId").val(),
-        firstName: $("#name").val(),
-        lastName: $("#lastName").val(),
-        age: $("#age").val(),
-        phone: $("#phone").val()
+        smsCode: $("#inputLogin").val()
     });
 
 }

@@ -4,6 +4,7 @@ import kursovoy.model.User;
 import kursovoy.model.constants.UserStatus;
 import kursovoy.model.jdbc.ColumnModel;
 import kursovoy.model.constants.DataConstants;
+import org.springframework.stereotype.Service;
 
 import java.sql.*;
 import java.util.Date;
@@ -13,6 +14,7 @@ import java.util.List;
 /**
  * Created by zaporozhec on 5/22/15.
  */
+@Service
 public class UserDao extends AbstractDao<User> {
 
     @Override
@@ -36,6 +38,8 @@ public class UserDao extends AbstractDao<User> {
         columns.add(new ColumnModel("FAIL_LOGIN_COUNT", DataConstants.INT));
         columns.add(new ColumnModel("STATUS", DataConstants.INT));
         columns.add(new ColumnModel("LAST_LOGIN_DATE", DataConstants.TIMESTAMP));
+        columns.add(new ColumnModel("SMS_CODE", DataConstants.STRING));
+        columns.add(new ColumnModel("PHONE", DataConstants.STRING));
         return columns;
     }
 
@@ -54,6 +58,8 @@ public class UserDao extends AbstractDao<User> {
         java.sql.Timestamp timestamp = rs.getTimestamp("LAST_LOGIN_DATE");
         if (timestamp != null)
             u.setLastLogin(new Date(timestamp.getTime()));
+        u.setSmsCode(rs.getString("SMS_CODE"));
+        u.setPhone(rs.getString("PHONE"));
         return u;
     }
 
@@ -75,8 +81,10 @@ public class UserDao extends AbstractDao<User> {
         } else {
             ps.setTimestamp(8, new Timestamp(model.getLastLogin().getTime()));
         }
+        ps.setString(9, model.getSmsCode());
+        ps.setString(10, model.getPhone());
         if (!isAdd) {
-            ps.setLong(9, model.getId());
+            ps.setLong(11, model.getId());
         }
     }
 }

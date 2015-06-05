@@ -3,6 +3,7 @@ package kursovoy.filter;
 import kursovoy.jdbc.AbstractDao;
 import kursovoy.jdbc.UserDao;
 import kursovoy.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.*;
@@ -14,14 +15,16 @@ import java.util.List;
 
 public final class KursovoyFilter implements Filter {
     private FilterConfig filterConfig = null;
-    final static String AUTH_KEY = "AUTH_KEY";
-    final static String INFO_KEY = "INFO_KEY";
-    final static UserDao util = new UserDao();
+    private final static String AUTH_KEY = "AUTH_KEY";
+    private final static String INFO_KEY = "INFO_KEY";
+    @Autowired
+    private UserDao userDao;
 
     public void init(FilterConfig filterConfig)
             throws ServletException {
         this.filterConfig = filterConfig;
     }
+
     // known cookie
     // fail count
     // IP history
@@ -60,7 +63,7 @@ public final class KursovoyFilter implements Filter {
         boolean toRedirect = !isAuthrized;
         if (toRedirect && requestedURI != null) {
             if (requestedURI.contains("/css/") || requestedURI.contains("/js/") || requestedURI.contains("/img/")
-                    || requestedURI.contains("/login") || requestedURI.contains("/selfRegistration") || requestedURI.contains(".jsp"))
+                    || requestedURI.contains("/sms-auth")       || requestedURI.contains("/login") || requestedURI.contains("/selfRegistration") || requestedURI.contains(".jsp"))
                 toRedirect = false;
         } else {
             toRedirect = false;
@@ -75,7 +78,7 @@ public final class KursovoyFilter implements Filter {
             for (Cookie cook : cookie) {
                 if (AUTH_KEY.equals(cook.getName())) {
                     String value = cook.getValue();
-                    List<User> userLIst = util.getRecordById(value);
+                    List<User> userLIst = userDao.getRecordById(value);
                     if (!CollectionUtils.isEmpty(userLIst)) {
                         result = userLIst.get(0);
                         break;
@@ -101,7 +104,7 @@ public final class KursovoyFilter implements Filter {
             for (Cookie cook : cookie) {
                 if (AUTH_KEY.equals(cook.getName())) {
                     String value = cook.getValue();
-                    List<User> userLIst = util.getRecordById(value);
+                    List<User> userLIst = userDao.getRecordById(value);
                     if (!CollectionUtils.isEmpty(userLIst)) {
                         result = true;
                         break;

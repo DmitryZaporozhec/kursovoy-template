@@ -2,6 +2,8 @@ package kursovoy.jdbc;
 
 import kursovoy.model.AbstractModel;
 import kursovoy.model.jdbc.ColumnModel;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.sql.*;
 import java.util.*;
@@ -10,12 +12,14 @@ import java.util.*;
  * Created by zaporozhec on 5/6/15.
  */
 public abstract class AbstractDao<Entity extends AbstractModel> {
-    final static String jdbcDriver = "com.mysql.jdbc.Driver";
-    final static String connectionString = "jdbc:mysql://localhost/KURSOVOY";
-    final static String userName = "root";
-    final static String password = "root";
-
-
+    @Value("${jdbc.connection.jdbcDriver}")
+    private String jdbcDriver;
+    @Value("${jdbc.connection.string}")
+    String connectionString;
+    @Value("${jdbc.connection.user}")
+    private String userName;
+    @Value("${jdbc.connection.password}")
+    private String password;
     protected abstract String getIdColumnName();
 
     protected abstract String getTableName();
@@ -91,24 +95,24 @@ public abstract class AbstractDao<Entity extends AbstractModel> {
         return columns.toString();
     }
 
-    public void save(Entity u) throws Exception{
+    public void save(Entity u) throws Exception {
         Connection conn = null;
         PreparedStatement stmt = null;
-            conn = this.connect();
-            String sql;
-            if (u.getId() == 0) {
-                sql = this.createAddSQL();
-                stmt = conn.prepareStatement(sql);
-                this.fillSaveUpdatePreparedStatement(stmt, u, true);
-                stmt.executeUpdate();
-            } else {
-                sql = this.createUpdateSQL();
-                stmt = conn.prepareStatement(sql);
-                this.fillSaveUpdatePreparedStatement(stmt, u, false);
-                stmt.executeUpdate();
-            }
-            stmt.close();
-            conn.close();
+        conn = this.connect();
+        String sql;
+        if (u.getId() == 0) {
+            sql = this.createAddSQL();
+            stmt = conn.prepareStatement(sql);
+            this.fillSaveUpdatePreparedStatement(stmt, u, true);
+            stmt.executeUpdate();
+        } else {
+            sql = this.createUpdateSQL();
+            stmt = conn.prepareStatement(sql);
+            this.fillSaveUpdatePreparedStatement(stmt, u, false);
+            stmt.executeUpdate();
+        }
+        stmt.close();
+        conn.close();
     }
 
     public void delete(int userId) {

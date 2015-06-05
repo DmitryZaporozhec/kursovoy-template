@@ -5,6 +5,7 @@ import kursovoy.model.constants.LoginStatus;
 import kursovoy.model.constants.UserStatus;
 import kursovoy.model.jdbc.ColumnModel;
 import kursovoy.model.constants.DataConstants;
+import org.springframework.stereotype.Service;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -17,6 +18,7 @@ import java.util.List;
 /**
  * Created by zaporozhec on 5/22/15.
  */
+@Service
 public class UserIpHistoryDao extends AbstractDao<UserIpHistory> {
 
     @Override
@@ -72,8 +74,8 @@ public class UserIpHistoryDao extends AbstractDao<UserIpHistory> {
             ps.setTimestamp(4, new Timestamp(model.getLoginDate().getTime()));
         }
 
-        ps.setString(5,model.getUserAgent());
-        ps.setString(6,model.getLocale());
+        ps.setString(5, model.getUserAgent());
+        ps.setString(6, model.getLocale());
         if (!isAdd) {
             ps.setLong(7, model.getId());
         }

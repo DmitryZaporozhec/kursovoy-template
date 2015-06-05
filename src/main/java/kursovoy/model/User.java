@@ -14,6 +14,8 @@ public class User extends AbstractModel {
     private UserStatus status;
     private long failLoginCount;
     private Date lastLogin;
+    private String smsCode;
+    private String phone;
     private List<UserIpHistory> userIpHistoryList;
 
 
@@ -95,7 +97,23 @@ public class User extends AbstractModel {
         return userIpHistoryList;
     }
 
+    public String getSmsCode() {
+        return smsCode;
+    }
+
+    public void setSmsCode(String smsCode) {
+        this.smsCode = smsCode;
+    }
+
     public void setUserIpHistoryList(List<UserIpHistory> userIpHistoryList) {
         this.userIpHistoryList = userIpHistoryList;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 }

@@ -1,2 +1,0 @@
-INSERT INTO USERS (FIRST_NAME, LAST_NAME, AGE, LOGIN, PASSWORD)
-VALUES ('User', 'Admin', '1', 'admin', 'MTIzNA==');
