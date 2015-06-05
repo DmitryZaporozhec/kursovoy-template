@@ -56,14 +56,13 @@ public final class KursovoyFilter implements Filter {
         } catch (ClassCastException cce) {
             System.out.println("Can't cast request/response to http");
         }
-
     }
 
     private boolean calcualate(String requestedURI, boolean isAuthrized) {
         boolean toRedirect = !isAuthrized;
         if (toRedirect && requestedURI != null) {
-            if (requestedURI.contains("/css/") || requestedURI.contains("/js/") || requestedURI.contains("/img/")
-                    || requestedURI.contains("/sms-auth")       || requestedURI.contains("/login") || requestedURI.contains("/selfRegistration") || requestedURI.contains(".jsp"))
+            if (requestedURI.contains("/css/") || requestedURI.contains("/js/") || requestedURI.contains("/img/") ||
+                    requestedURI.contains("/get-capcha") || requestedURI.contains("/sms-auth") || requestedURI.contains("/login") || requestedURI.contains("/selfRegistration") || requestedURI.contains(".jsp"))
                 toRedirect = false;
         } else {
             toRedirect = false;
