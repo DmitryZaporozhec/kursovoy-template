@@ -31,7 +31,8 @@ function toJson() {
         firstName: $("#name").val(),
         lastName: $("#lastName").val(),
         age: $("#age").val(),
-        phone: $("#phone").val()
+        email: $("#email").val(),
+        passPhrase: $("#passPhrase").val()
     });
 
 }

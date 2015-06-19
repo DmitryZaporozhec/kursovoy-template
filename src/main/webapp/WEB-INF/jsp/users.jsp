@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
-    <title>User Managment System</title>
+    <title>Управление пользователями</title>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
@@ -11,14 +12,14 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Login</th>
-        <th>First Name</th>
-        <th>Last Name</th>
+        <th>Логин</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
         <th>Age</th>
-        <th>Fail Login Count</th>
-        <th>Last Success Login Date</th>
-        <th>Status</th>
-        <th>Action</th>
+        <th>Количество неудачных входов</th>
+        <th>Дата последнего удачного входа</th>
+        <th>Статус</th>
+        <th>Действия</th>
     </tr>
     </thead>
     <c:forEach var="user" items="${users}">
@@ -42,18 +43,18 @@
                 <table class="table">
                     <thead>
                     <tr class="info">
-                        <th colspan="3">Login History</th>
+                        <th colspan="3">История входов</th>
                     </tr>
                     <tr class="info">
-                        <th>Ip Address</th>
-                        <th>Date</th>
+                        <th>Ip Адресс</th>
+                        <th>Дата</th>
                         <th>User Agent</th>
-                        <th>Locale</th>
-                        <th>Status</th>
+                        <th>Язык</th>
+                        <th>Статус</th>
                     </tr>
                     </thead>
                     <c:forEach var="hisRec" items="${user.userIpHistoryList}">
-                        <tr <c:if test="${'SUCCESSFUL' eq hisRec.status}">class="success" </c:if>>
+                        <tr>
                             <td>${hisRec.ipAddress}</td>
                             <td>${hisRec.loginDate}</td>
                             <td>${hisRec.userAgent}</td>

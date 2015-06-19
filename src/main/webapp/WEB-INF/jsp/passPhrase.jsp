@@ -14,18 +14,17 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
-    <script language="javascript" src="/js/capcha-auth.js" type="text/javascript"></script>
+    <script language="javascript" src="/js/path-auth.js" type="text/javascript"></script>
 </head>
 
 <body>
 <div class="container container-login">
     <form id="doSmsAuth" class="form-sms-auth">
-        <h4>Подтвердите что вы человек.</h4>
-        <h4>Введите код с картинки</h4>
+        <h4>Введите ответ на секретный вопрос</h4>
+        <h4>Какой Ваш любимый цвет?</h4>
+        <h5><span id="error" class="label label-important"></span></h5>
         <input id="userId" type="hidden" value="${userId}"/>
-        <input id="captcha" type="hidden" value="${captcha}"/>
-        <img src="data:image/png;base64,${image}">
-        <input type="text" id="inputCaptcha" class="form-control" placeholder="Код" required autofocus>
+        <input type="text" id="answer" class="form-control" placeholder="Ответ" required autofocus>
         <button class="btn btn-lg btn-primary btn-block" type="submit">Отправить</button>
     </form>
 </div>

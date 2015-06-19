@@ -6,7 +6,7 @@ $(document).ready(function () {
     $("#doSmsAuth").on("submit", function () {
         $("#error").hide();
         $.ajax({
-            url: "/sms-auth",
+            url: "/captcha-auth",
             type: "POST",
             dataType: "text",
             contentType: "application/json",
@@ -26,8 +26,9 @@ $(document).ready(function () {
 
 function toJson() {
     return JSON.stringify({
-        login: $("#login").val(),
-        smsCode: $("#inputLogin").val()
+        userId: $("#userId").val(),
+        captcha: $("#captcha").val(),
+        inputCaptcha: $("#inputCaptcha").val()
     });
 
 }

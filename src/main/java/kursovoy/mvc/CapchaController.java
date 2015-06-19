@@ -1,13 +1,16 @@
 package kursovoy.mvc;
 
 
+import kursovoy.model.CapchaRequest;
+import kursovoy.model.SenderRequest;
+import kursovoy.model.User;
+import kursovoy.model.UserIpHistory;
+import kursovoy.model.constants.LoginStatus;
 import org.apache.commons.codec.binary.Base64OutputStream;
 import org.apache.commons.lang.RandomStringUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 import java.awt.Color;
 import java.awt.Font;
@@ -16,8 +19,9 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.image.BufferedImage;
 import java.io.*;
-import java.net.*;
 
+import java.util.Date;
+import java.util.List;
 import java.util.Random;
 import javax.imageio.ImageIO;
 import javax.servlet.*;
@@ -28,6 +32,33 @@ import javax.servlet.http.*;
  */
 @Controller
 public class CapchaController extends AbstractController {
+
+    @RequestMapping(value = "/captcha-auth", method = RequestMethod.POST)
+    public
+    @ResponseBody
+    String postCapcha(HttpServletRequest request, HttpServletResponse response, @RequestBody CapchaRequest smsRequest
+    ) throws Exception {
+        List<User> userList = userDao.getRecordById(smsRequest.getUserId());
+        User u = userList.get(0);
+        UserIpHistory userIpHistory = this.getUserIpHistory(u, request);
+        if (smsRequest.getCaptcha().equals(smsRequest.getInputCaptcha())) {
+            u.setFailLoginCount(0);
+            u.setLastLogin(new Date());
+            u.setSmsCode(null);
+            userIpHistory.setStatus(LoginStatus.SUCCESS_CAPCHA);
+            this.save(u, userIpHistory);
+            this.saveCookie(u, response);
+            response.setStatus(HttpServletResponse.SC_OK);
+            return "/userList";
+        } else {
+            response.setStatus(HttpServletResponse.SC_OK);
+            u.setFailLoginCount(u.getFailLoginCount() + 1);
+            userIpHistory.setStatus(LoginStatus.FAIL_CAPCHA);
+            this.save(u, userIpHistory);
+            return "/get-capcha?userId=" + u.getId();
+        }
+    }
+
     @RequestMapping(value = "/get-capcha", method = RequestMethod.GET)
     public String processRequest(HttpServletRequest request,
                                  HttpServletResponse response, Model model, @RequestParam(value = "userId", required = true) String userId)
@@ -51,7 +82,7 @@ public class CapchaController extends AbstractController {
         g2d.setRenderingHints(rh);
 
         GradientPaint gp = new GradientPaint(0, 0,
-                new Color(221, 221, 221), width/2, height / 2,
+                new Color(221, 221, 221), width / 2, height / 2,
                 new Color(255, 255, 255), true);
 
         g2d.setPaint(gp);

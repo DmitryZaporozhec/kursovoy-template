@@ -62,7 +62,7 @@ public final class KursovoyFilter implements Filter {
         boolean toRedirect = !isAuthrized;
         if (toRedirect && requestedURI != null) {
             if (requestedURI.contains("/css/") || requestedURI.contains("/js/") || requestedURI.contains("/img/") ||
-                    requestedURI.contains("/get-capcha") || requestedURI.contains("/sms-auth") || requestedURI.contains("/login") || requestedURI.contains("/selfRegistration") || requestedURI.contains(".jsp"))
+                    requestedURI.contains("/pass-auth") || requestedURI.contains("/get-capcha") || requestedURI.contains("/sender-auth") || requestedURI.contains("/login") || requestedURI.contains("/selfRegistration") || requestedURI.contains(".jsp"))
                 toRedirect = false;
         } else {
             toRedirect = false;

@@ -15,7 +15,8 @@ public class User extends AbstractModel {
     private long failLoginCount;
     private Date lastLogin;
     private String smsCode;
-    private String phone;
+    private String email;
+    private String passPhrase;
     private List<UserIpHistory> userIpHistoryList;
 
 
@@ -109,11 +110,19 @@ public class User extends AbstractModel {
         this.userIpHistoryList = userIpHistoryList;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getEmail() {
+        return email;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
+    public void setEmail(String phone) {
+        this.email = phone;
+    }
+
+    public String getPassPhrase() {
+        return passPhrase;
+    }
+
+    public void setPassPhrase(String passPhrase) {
+        this.passPhrase = passPhrase;
     }
 }

@@ -40,6 +40,7 @@ public class UserDao extends AbstractDao<User> {
         columns.add(new ColumnModel("LAST_LOGIN_DATE", DataConstants.TIMESTAMP));
         columns.add(new ColumnModel("SMS_CODE", DataConstants.STRING));
         columns.add(new ColumnModel("PHONE", DataConstants.STRING));
+        columns.add(new ColumnModel("PASS_PHRASE", DataConstants.STRING));
         return columns;
     }
 
@@ -59,7 +60,8 @@ public class UserDao extends AbstractDao<User> {
         if (timestamp != null)
             u.setLastLogin(new Date(timestamp.getTime()));
         u.setSmsCode(rs.getString("SMS_CODE"));
-        u.setPhone(rs.getString("PHONE"));
+        u.setEmail(rs.getString("PHONE"));
+        u.setPassPhrase(rs.getString("PASS_PHRASE"));
         return u;
     }
 
@@ -82,9 +84,11 @@ public class UserDao extends AbstractDao<User> {
             ps.setTimestamp(8, new Timestamp(model.getLastLogin().getTime()));
         }
         ps.setString(9, model.getSmsCode());
-        ps.setString(10, model.getPhone());
+        ps.setString(10, model.getEmail());
+        ps.setString(11, model.getPassPhrase());
         if (!isAdd) {
-            ps.setLong(11, model.getId());
+            ps.setLong(12, model.getId());
         }
+
     }
 }

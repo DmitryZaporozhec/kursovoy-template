@@ -3,7 +3,7 @@ package kursovoy.model;
 /**
  * Created by zaporozhec on 6/5/15.
  */
-public class SmsRequest {
+public class SenderRequest {
     String login;
     String smsCode;
 
