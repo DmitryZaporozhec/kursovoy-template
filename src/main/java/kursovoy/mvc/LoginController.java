@@ -51,10 +51,4 @@ public class LoginController {
             return "Wrong Password!";
         }
     }
-
-    @RequestMapping(value = "/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) throws Exception {
-        response.addCookie(new Cookie(MY_COOKIE_NAME, ""));
-        return "login";
-    }
 }
