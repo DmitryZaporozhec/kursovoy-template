@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@page pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
     <title>User Managment System</title>
@@ -11,11 +12,12 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Login</th>
-        <th>First Name</th>
-        <th>Last Name</th>
-        <th>Age</th>
-        <th>Action</th>
+        <th>Логин</th>
+        <th>Имя</th>
+        <th>Фамилия</th>
+        <th>Возвраст</th>
+        <th>Тип Пользователя</th>
+        <th>Действия</th>
     </tr>
     </thead>
     <c:forEach var="user" items="${users}">
@@ -24,6 +26,7 @@
             <td>${user.firstName} </td>
             <td> ${user.lastName} </td>
             <td> ${user.age}</td>
+            <td> ${user.userType.name()}</td>
             <td><a href="/user?userId=${user.userId}"><i class="icon-edit"></i></a>
                 <a href="/delete?userId=${user.userId}"><i class="icon-trash"></i></a>
             </td>

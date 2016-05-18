@@ -30,7 +30,8 @@ function toJson() {
         userId: $("#userId").val(),
         firstName: $("#name").val(),
         lastName: $("#lastName").val(),
-        age: $("#age").val()
+        age: $("#age").val(),
+        userType: $("#userType").val()
     });
 
 }

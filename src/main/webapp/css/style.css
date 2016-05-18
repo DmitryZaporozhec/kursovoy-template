@@ -1,6 +1,7 @@
 .left {
     float: left;
 }
+
 .clear {
     clear: both;
 }
@@ -10,6 +11,10 @@
     background-color: #afafa2;
 }
 
-.container-login{
-    width:225px !important;
+.container-login {
+    width: 225px !important;
+}
+
+form {
+    padding-left: 25px;
 }

@@ -1,5 +1,6 @@
 package kursovoy.jdbc;
 
+import kursovoy.constants.UserType;
 import kursovoy.model.User;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -11,7 +12,7 @@ import java.util.*;
  */
 public class JDBCUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
-    final static String connectionString = "jdbc:mysql://localhost/KURSOVOY";
+    final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
     final static String userName = "root";
     final static String password = "root";
 
@@ -32,28 +33,29 @@ public class JDBCUtil {
 
             String sql;
             if (u.getUserId() == 0) {
-                sql = "INSERT INTO USERS(FIRST_NAME,LAST_NAME,AGE,LOGIN,PASSWORD) VALUES (?,?,?,?,?)";
+                sql = "INSERT INTO USERS(FIRST_NAME,LAST_NAME,AGE,LOGIN,PASSWORD,USER_TYPE) VALUES (?,?,?,?,?,?)";
                 stmt = conn.prepareStatement(sql);
                 stmt.setString(1, u.getFirstName());
                 stmt.setString(2, u.getLastName());
                 stmt.setInt(3, u.getAge());
                 stmt.setString(4, u.getLogin());
                 stmt.setString(5, u.getPassword());
+                stmt.setString(6, u.getUserType().name());
                 stmt.executeUpdate();
                 //add user
             } else {
-                sql = "UPDATE USERS SET FIRST_NAME =?, LAST_NAME=?, AGE=?, LOGIN=?, PASSWORD=? WHERE USER_ID = ?";
+                sql = "UPDATE USERS SET FIRST_NAME =?, LAST_NAME=?, AGE=?, LOGIN=?, PASSWORD=?,USER_TYPE=? WHERE USER_ID = ?";
                 stmt = conn.prepareStatement(sql);
                 stmt.setString(1, u.getFirstName());
                 stmt.setString(2, u.getLastName());
                 stmt.setInt(3, u.getAge());
                 stmt.setString(4, u.getLogin());
                 stmt.setString(5, u.getPassword());
-                stmt.setInt(6, u.getUserId());
+                stmt.setString(6, u.getUserType().name());
+                stmt.setInt(7, u.getUserId());
                 stmt.executeUpdate();
                 //update user
             }
-
             stmt.close();
             conn.close();
         } catch (SQLException se) {
@@ -130,6 +132,8 @@ public class JDBCUtil {
                 u.setAge(rs.getInt("AGE"));
                 u.setLogin(rs.getString("LOGIN"));
                 u.setPassword(rs.getString("PASSWORD"));
+                if (rs.getString("USER_TYPE") != null)
+                    u.setUserType(UserType.valueOf(rs.getString("USER_TYPE")));
                 userList.add(u);
             }
             rs.close();

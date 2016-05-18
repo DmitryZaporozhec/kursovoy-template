@@ -1,5 +1,6 @@
 package kursovoy.mvc;
 
+import kursovoy.constants.UserType;
 import kursovoy.jdbc.JDBCUtil;
 import kursovoy.model.User;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -37,14 +38,14 @@ public class UserController {
         }
         if (u.getPassword() != null && u.getPassword().length() > 0)
             u.setPassword(new String(Base64.decodeBase64(u.getPassword())));
+        model.addAttribute("userTypes", UserType.values());
         model.addAttribute("user", u);
         return "user";
     }
 
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
-    public String delete(Model model, @RequestParam(value = "userId", required = true) final int userId)
-    {
+    public String delete(Model model, @RequestParam(value = "userId", required = true) final int userId) {
         JDBCUtil jdbcUtil = new JDBCUtil();
         jdbcUtil.delete(userId);
         return "redirect:/userList";
@@ -62,7 +63,7 @@ public class UserController {
     public
     @ResponseBody
     String save(final HttpServletRequest request,
-                final HttpServletResponse response, final @RequestBody User u) throws Exception{
+                final HttpServletResponse response, final @RequestBody User u) throws Exception {
         JDBCUtil jdbcUtil = new JDBCUtil();
         try {
             u.setPassword(Base64.encodeBase64String(u.getPassword().getBytes()));
