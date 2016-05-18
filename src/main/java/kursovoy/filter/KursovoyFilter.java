@@ -1,6 +1,6 @@
 package kursovoy.filter;
 
-import kursovoy.jdbc.JDBCUtil;
+import kursovoy.jdbc.JDBCUserUtil;
 import kursovoy.model.User;
 import org.springframework.util.CollectionUtils;
 
@@ -68,7 +68,7 @@ public final class KursovoyFilter implements Filter {
             for (Cookie cook : cookie) {
                 if (MY_COOKIE_NAME.equals(cook.getName())) {
                     String value = cook.getValue();
-                    JDBCUtil util = new JDBCUtil();
+                    JDBCUserUtil util = new JDBCUserUtil();
                     List<User> userLIst = util.getUser(value);
                     if (!CollectionUtils.isEmpty(userLIst)) {
                         result = userLIst.get(0);
@@ -95,7 +95,7 @@ public final class KursovoyFilter implements Filter {
             for (Cookie cook : cookie) {
                 if (MY_COOKIE_NAME.equals(cook.getName())) {
                     String value = cook.getValue();
-                    JDBCUtil util = new JDBCUtil();
+                    JDBCUserUtil util = new JDBCUserUtil();
                     List<User> userLIst = util.getUser(value);
                     if (!CollectionUtils.isEmpty(userLIst)) {
                         result = true;

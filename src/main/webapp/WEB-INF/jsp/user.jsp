@@ -7,6 +7,7 @@
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <script language="javascript" src="/js/user.js" type="text/javascript"></script>
+    <script language="javascript" src="/js/bootstrap-dropdown.js" type="text/javascript"></script>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
@@ -46,7 +47,7 @@
         <input id="password" type="password" value="${user.password}">
         <div>
             <button type="submit" class="btn btn-primary">Сохранить</button>
-            <a class="btn btn-danger" href="/delete?userId=${user.userId}">Delete</a>
+            <a class="btn btn-danger" href="/delete?userId=${user.userId}">Удалить</a>
         </div>
     </fieldset>
 </form>

@@ -18,3 +18,12 @@
 form {
     padding-left: 25px;
 }
+
+.brand {
+    margin-left: 0px !important;
+    font-size: 14px !important;
+}
+
+body {
+    background-color: #eee !important;
+}

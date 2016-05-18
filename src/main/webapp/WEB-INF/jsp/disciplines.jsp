@@ -3,7 +3,7 @@
 <%@page pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
-    <title>Управление пользователями</title>
+    <title>User Managment System</title>
     <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -14,23 +14,17 @@
 <table class="table">
     <thead>
     <tr>
-        <th>Логин</th>
-        <th>Имя</th>
-        <th>Фамилия</th>
-        <th>Возвраст</th>
-        <th>Тип Пользователя</th>
+        <th>Название</th>
+        <th>Описание</th>
         <th>Действия</th>
     </tr>
     </thead>
-    <c:forEach var="user" items="${users}">
+    <c:forEach var="discipline" items="${disciplines}">
         <tr>
-            <td>${user.login} </td>
-            <td>${user.firstName} </td>
-            <td> ${user.lastName} </td>
-            <td> ${user.age}</td>
-            <td> ${user.userType.name()}</td>
-            <td><a href="/user?userId=${user.userId}"><i class="icon-edit"></i></a>
-                <a href="/delete?userId=${user.userId}"><i class="icon-trash"></i></a>
+            <td>${discipline.name} </td>
+            <td>${discipline.description} </td>
+            <td><a href="/discipline/get?id=${discipline.disciplineId}"><i class="icon-edit"></i></a>
+                <a href="/discipline/delete?id=${discipline.disciplineId}"><i class="icon-trash"></i></a>
             </td>
         </tr>
     </c:forEach>

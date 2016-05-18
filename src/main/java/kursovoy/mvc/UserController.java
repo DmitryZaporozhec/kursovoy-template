@@ -1,12 +1,12 @@
 package kursovoy.mvc;
 
 import kursovoy.constants.UserType;
-import kursovoy.jdbc.JDBCUtil;
+import kursovoy.jdbc.JDBCNewsUtil;
+import kursovoy.jdbc.JDBCUserUtil;
 import kursovoy.model.User;
 import org.apache.tomcat.util.codec.binary.Base64;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -19,8 +19,8 @@ public class UserController {
     @RequestMapping(value = "/userList", method = RequestMethod.GET)
     public String get(HttpServletRequest request, Model model) {
 
-        JDBCUtil jdbcUtil = new JDBCUtil();
-        List<User> allUsers = jdbcUtil.getAllUsers();
+        JDBCUserUtil jdbcUserUtil = new JDBCUserUtil();
+        List<User> allUsers = jdbcUserUtil.getAllUsers();
         //Get all users
         model.addAttribute("users", allUsers);
         return "users";
@@ -31,8 +31,8 @@ public class UserController {
     public String getUser(Model model, @RequestParam(value = "userId", required = false) final String userId) {
         User u = new User();
         if (userId != null) {
-            JDBCUtil jdbcUtil = new JDBCUtil();
-            List<User> allUsers = jdbcUtil.getUser(userId);
+            JDBCUserUtil jdbcUserUtil = new JDBCUserUtil();
+            List<User> allUsers = jdbcUserUtil.getUser(userId);
             if (!org.springframework.util.CollectionUtils.isEmpty(allUsers))
                 u = allUsers.get(0);
         }
@@ -46,8 +46,8 @@ public class UserController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
     public String delete(Model model, @RequestParam(value = "userId", required = true) final int userId) {
-        JDBCUtil jdbcUtil = new JDBCUtil();
-        jdbcUtil.delete(userId);
+        JDBCUserUtil jdbcUserUtil = new JDBCUserUtil();
+        jdbcUserUtil.delete(userId);
         return "redirect:/userList";
     }
 
@@ -64,15 +64,22 @@ public class UserController {
     @ResponseBody
     String save(final HttpServletRequest request,
                 final HttpServletResponse response, final @RequestBody User u) throws Exception {
-        JDBCUtil jdbcUtil = new JDBCUtil();
+        JDBCUserUtil jdbcUserUtil = new JDBCUserUtil();
         try {
             u.setPassword(Base64.encodeBase64String(u.getPassword().getBytes()));
-            jdbcUtil.saveUser(u);
+            jdbcUserUtil.saveUser(u);
         } catch (Exception e) {
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
             return "ERROR";
         }
         return "OK";
+    }
+
+    @RequestMapping(value = "/index", method = RequestMethod.GET)
+    public String getIndex(Model model) {
+        JDBCNewsUtil jdbcUserUtil = new JDBCNewsUtil();
+        model.addAttribute("newsList", jdbcUserUtil.getTop10News());
+        return "index";
     }
 
 

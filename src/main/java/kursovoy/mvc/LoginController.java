@@ -1,6 +1,6 @@
 package kursovoy.mvc;
 
-import kursovoy.jdbc.JDBCUtil;
+import kursovoy.jdbc.JDBCUserUtil;
 import kursovoy.model.LoginRequest;
 import kursovoy.model.User;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -28,7 +28,7 @@ public class LoginController {
     public
     @ResponseBody
     String login(HttpServletRequest request, HttpServletResponse response, @RequestBody LoginRequest loginRequest) throws Exception {
-        JDBCUtil util = new JDBCUtil();
+        JDBCUserUtil util = new JDBCUserUtil();
         List<User> userList = util.getUser("LOGIN", loginRequest.getLogin());
         if (CollectionUtils.isEmpty(userList)) {
             // no such user
@@ -41,10 +41,10 @@ public class LoginController {
             //Good password
             Cookie cook = new Cookie(MY_COOKIE_NAME, String.valueOf(userList.get(0).getUserId()));
             //seconds
-            cook.setMaxAge(300);
+            cook.setMaxAge(-1);
             response.addCookie(cook);
             response.setStatus(HttpServletResponse.SC_OK);
-            return "/userList";
+            return "/index";
         } else {
             //bad password
             response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
