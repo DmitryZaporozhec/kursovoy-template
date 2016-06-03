@@ -1,10 +1,12 @@
 package kursovoy.mvc;
 
+import kursovoy.jdbc.JDBCContentUtil;
 import kursovoy.jdbc.JDBCCourseUtil;
 import kursovoy.jdbc.JDBCDisciplineUtil;
 import kursovoy.jdbc.JDBCNewsUtil;
 import kursovoy.model.Course;
 import kursovoy.model.Discipline;
+import kursovoy.model.FloalaContent;
 import kursovoy.model.News;
 import kursovoy.utils.CookieUtil;
 import org.springframework.stereotype.Controller;
@@ -38,6 +40,8 @@ public class CourseController {
         List<Discipline> disciplines = new JDBCDisciplineUtil().getAllDisciplines();
         model.addAttribute("course", d);
         model.addAttribute("disciplines", disciplines);
+        List<FloalaContent> con = new JDBCContentUtil().get("COURSE_ID", String.valueOf(d.getId()));
+        model.addAttribute("menu", con);
         return "course";
     }
 

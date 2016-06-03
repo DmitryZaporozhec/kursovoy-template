@@ -12,7 +12,7 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-sm-2">
             <jsp:include page="includes/menu.jsp"/>
         </div>
         <div class="col-md-10">

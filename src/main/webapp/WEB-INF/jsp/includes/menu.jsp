@@ -1,5 +1,5 @@
 <%@page pageEncoding="UTF-8" %>
-<div class="navbar">
+<div id="menu" class="navbar">
     <ul class="nav">
         <li><a href="/index"><span class="glyphicon glyphicon-home"> Домой</span></a></li>
         <li role="presentation" class="dropdown">

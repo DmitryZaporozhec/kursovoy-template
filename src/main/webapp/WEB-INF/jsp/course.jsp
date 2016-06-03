@@ -20,7 +20,12 @@
                 <jsp:include page="includes/menu.jsp"/>
             </c:if>
         </div>
-        <div class="col-sm-10">
+        <div class="col-sm-2">
+            <c:if test="${CURRENT_USER_ID!= null}">
+                <jsp:include page="includes/course-tree.jsp"/>
+            </c:if>
+        </div>
+        <div class="col-sm-8">
             <form id="edit-course-form" class="clearfix">
                 <fieldset>
                     <legend>Редактирование курса ${course.name}</legend>
