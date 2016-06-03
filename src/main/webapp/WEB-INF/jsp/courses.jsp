@@ -1,9 +1,10 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@page pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
-    <title>User Managment System</title>
+    <title>Курсы</title>
     <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -18,22 +19,29 @@
             </c:if>
         </div>
         <div class="col-sm-10">
-            <h3>Список дисциплин</h3>
+            <h3>Список курсов</h3>
             <table class="table">
                 <thead>
                 <tr>
                     <th>Название</th>
                     <th>Описание</th>
+                    <th>Создатель</th>
+                    <th>Дисциплина</th>
+                    <th>Обнволено</th>
                     <th>Действия</th>
                 </tr>
                 </thead>
-                <c:forEach var="discipline" items="${disciplines}">
+                <c:forEach var="course" items="${courses}">
                     <tr>
-                        <td>${discipline.name} </td>
-                        <td>${discipline.description} </td>
-                        <td><a href="/discipline/get?id=${discipline.disciplineId}"><i
+                        <td>${course.name} </td>
+                        <td>${course.description} </td>
+                        <td>${course.userDisplayName} </td>
+                        <td>${course.disciplineName} </td>
+                        <td><fmt:formatDate pattern="yyyy MM dd HH:mm"
+                                            value="${course.createDate}"/></td>
+                        <td><a href="/course/get?id=${course.id}"><i
                                 class="glyphicon glyphicon-edit"></i></a>
-                            <a href="/discipline/delete?id=${discipline.disciplineId}"><i
+                            <a href="/course/delete?id=${course.id}"><i
                                     class="glyphicon glyphicon-remove"></i></a>
                         </td>
                     </tr>

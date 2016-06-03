@@ -27,3 +27,48 @@ form {
 body {
     background-color: #eee !important;
 }
+
+label {
+    width: 200px;
+    text-align: right;
+}
+
+input {
+    width: 400px;
+    padding-left: 10px;
+    border-radius: 6px;
+    background-color: #fafafa;
+}
+
+textarea {
+    width: 400px;
+    padding-left: 10px;
+    border-radius: 6px;
+    background-color: #fafafa;
+}
+
+select {
+    width: 400px;
+    padding-left: 10px;
+    border-radius: 6px;
+    height: 25px;
+    background-color: #fafafa;
+}
+
+div .form-row {
+    margin: 5px 0;
+    min-height: 40px;
+}
+
+div .control {
+    width: 50%;
+    margin: 0 auto;
+}
+
+input:read-only {
+    background-color: #f0f0f0;
+}
+
+select:disabled {
+    background-color: #f0f0f0;
+}

@@ -2,6 +2,7 @@ package kursovoy.filter;
 
 import kursovoy.jdbc.JDBCUserUtil;
 import kursovoy.model.User;
+import kursovoy.utils.CookieUtil;
 import org.springframework.util.CollectionUtils;
 
 import javax.servlet.*;
@@ -13,7 +14,6 @@ import java.util.List;
 
 public final class KursovoyFilter implements Filter {
     private FilterConfig filterConfig = null;
-    final static String MY_COOKIE_NAME = "KursovoiCookie";
 
     public void init(FilterConfig filterConfig)
             throws ServletException {
@@ -61,27 +61,9 @@ public final class KursovoyFilter implements Filter {
         return toRedirect;
     }
 
-    protected User getCurrentUser(HttpServletRequest request) {
-        User result = null;
-        Cookie[] cookie = request.getCookies();
-        if (cookie != null) {
-            for (Cookie cook : cookie) {
-                if (MY_COOKIE_NAME.equals(cook.getName())) {
-                    String value = cook.getValue();
-                    JDBCUserUtil util = new JDBCUserUtil();
-                    List<User> userLIst = util.getUser(value);
-                    if (!CollectionUtils.isEmpty(userLIst)) {
-                        result = userLIst.get(0);
-                        break;
-                    }
-                }
-            }
-        }
-        return result;
-    }
 
     protected void fillUIHeader(HttpServletRequest request) {
-        User u = this.getCurrentUser(request);
+        User u = CookieUtil.getCurrentUser(request);
         if (u != null) {
             request.setAttribute("HEADER_USER_NAME", u.getFirstName() + " " + u.getLastName());
             request.setAttribute("CURRENT_USER_ID", u.getUserId());
@@ -93,7 +75,7 @@ public final class KursovoyFilter implements Filter {
         Cookie[] cookie = request.getCookies();
         if (cookie != null) {
             for (Cookie cook : cookie) {
-                if (MY_COOKIE_NAME.equals(cook.getName())) {
+                if (CookieUtil.MY_COOKIE_NAME.equals(cook.getName())) {
                     String value = cook.getValue();
                     JDBCUserUtil util = new JDBCUserUtil();
                     List<User> userLIst = util.getUser(value);

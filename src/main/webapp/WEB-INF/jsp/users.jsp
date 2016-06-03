@@ -6,34 +6,41 @@
     <title>Управление пользователями</title>
     <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <link href="/css/bootstrap.min.css" rel="stylesheet">
     <script language="javascript" src="/js/bootstrap-dropdown.js" type="text/javascript"></script>
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 <body>
-<jsp:include page="includes/header.jsp"/>
-<table class="table">
-    <thead>
-    <tr>
-        <th>Логин</th>
-        <th>Имя</th>
-        <th>Фамилия</th>
-        <th>Возвраст</th>
-        <th>Тип Пользователя</th>
-        <th>Действия</th>
-    </tr>
-    </thead>
-    <c:forEach var="user" items="${users}">
-        <tr>
-            <td>${user.login} </td>
-            <td>${user.firstName} </td>
-            <td> ${user.lastName} </td>
-            <td> ${user.age}</td>
-            <td> ${user.userType.name()}</td>
-            <td><a href="/user?userId=${user.userId}"><i class="icon-edit"></i></a>
-                <a href="/delete?userId=${user.userId}"><i class="icon-trash"></i></a>
-            </td>
-        </tr>
-    </c:forEach>
-</table>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-md-2">
+            <jsp:include page="includes/menu.jsp"/>
+        </div>
+        <div class="col-md-10">
+            <h3>Список пользователей</h3>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Логин</th>
+                    <th>Имя</th>
+                    <th>Фамилия</th>
+                    <th>Тип Пользователя</th>
+                    <th>Действия</th>
+                </tr>
+                </thead>
+                <c:forEach var="user" items="${users}">
+                    <tr>
+                        <td>${user.login} </td>
+                        <td>${user.firstName} </td>
+                        <td> ${user.lastName} </td>
+                        <td> ${user.userType.name()}</td>
+                        <td><a href="/user?userId=${user.userId}"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a href="/delete?userId=${user.userId}"><i class="glyphicon glyphicon-remove"></i></a>
+                        </td>
+                    </tr>
+                </c:forEach>
+            </table>
+        </div>
+    </div>
+</div>
 </body>
 </html>

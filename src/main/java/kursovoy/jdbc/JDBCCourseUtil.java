@@ -1,30 +1,34 @@
 package kursovoy.jdbc;
 
 import kursovoy.constants.UserType;
+import kursovoy.model.Course;
 import kursovoy.model.User;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.*;
 import java.util.*;
+import java.util.Date;
 
 /**
  * Created by zaporozhec on 5/6/15.
  */
-public class JDBCUserUtil {
+public class JDBCCourseUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
     final static String userName = "root";
     final static String password = "root";
 
-    public List<User> getAllUsers() {
-        return getUser(null, null);
+    public List<Course> getAllCoursed() {
+        return getCourse(null, null);
     }
 
-    public List<User> getUser(String userId) {
-        return getUser("USER_ID", userId);
+    public Course getCourse(String userId) {
+        List<Course> courses = getCourse("ID", userId);
+        if (courses != null && courses.size() > 0)
+            return courses.get(0);
+        return null;
     }
 
-    public User saveUser(User u) {
+    public Course saveCourse(Course u) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -32,15 +36,17 @@ public class JDBCUserUtil {
             conn = DriverManager.getConnection(connectionString, userName, password);
 
             String sql;
-            if (u.getUserId() == 0) {
-                sql = "INSERT INTO USERS(FIRST_NAME,LAST_NAME,AGE,LOGIN,PASSWORD,USER_TYPE) VALUES (?,?,?,?,?,?)";
+            if (u.getId() == 0) {
+                sql = "INSERT INTO COURSE(DISCIPLINE_ID,USER_ID,NAME,DESCRIPTION,CREATE_DATE) VALUES (?,?,?,?,?)";
                 stmt = conn.prepareStatement(sql);
-                stmt.setString(1, u.getFirstName());
-                stmt.setString(2, u.getLastName());
-                stmt.setInt(3, u.getAge());
-                stmt.setString(4, u.getLogin());
-                stmt.setString(5, u.getPassword());
-                stmt.setString(6, u.getUserType().name());
+                stmt.setInt(1, u.getDisciplineId());
+                stmt.setInt(2, u.getUserId());
+                stmt.setString(3, u.getName());
+                stmt.setString(4, u.getDescription());
+                if (u.getCreateDate() == null) {
+                    u.setCreateDate(new Date());
+                }
+                stmt.setTimestamp(5, new java.sql.Timestamp(u.getCreateDate().getTime()));
                 stmt.executeUpdate();
                 ResultSet resultSet = stmt.getGeneratedKeys();
                 {
@@ -51,15 +57,17 @@ public class JDBCUserUtil {
                 }
                 //add user
             } else {
-                sql = "UPDATE USERS SET FIRST_NAME =?, LAST_NAME=?, AGE=?, LOGIN=?, PASSWORD=?,USER_TYPE=? WHERE USER_ID = ?";
+                sql = "UPDATE COURSE SET DISCIPLINE_ID =?, USER_ID=?, NAME=?, DESCRIPTION=?, CREATE_DATE=? WHERE ID = ?";
                 stmt = conn.prepareStatement(sql);
-                stmt.setString(1, u.getFirstName());
-                stmt.setString(2, u.getLastName());
-                stmt.setInt(3, u.getAge());
-                stmt.setString(4, u.getLogin());
-                stmt.setString(5, u.getPassword());
-                stmt.setString(6, u.getUserType().name());
-                stmt.setInt(7, u.getUserId());
+                stmt.setInt(1, u.getDisciplineId());
+                stmt.setInt(2, u.getUserId());
+                stmt.setString(3, u.getName());
+                stmt.setString(4, u.getDescription());
+                if (u.getCreateDate() == null) {
+                    u.setCreateDate(new Date());
+                }
+                stmt.setTimestamp(5, new java.sql.Timestamp(u.getCreateDate().getTime()));
+                stmt.setInt(6, u.getId());
                 stmt.executeUpdate();
                 //update user
             }
@@ -85,16 +93,16 @@ public class JDBCUserUtil {
         return u;
     }
 
-    public void delete(int userId) {
+    public void delete(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
 
-            String sql = "DELETE FROM USERS WHERE USER_ID=?";
+            String sql = "DELETE FROM COURSE WHERE ID=?";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, userId);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
             stmt.close();
             conn.close();
@@ -117,31 +125,40 @@ public class JDBCUserUtil {
         }
     }
 
-    public List<User> getUser(String attrName, String attrVal) {
-        List<User> userList = new ArrayList<User>();
+    public List<Course> getCourse(String attrName, String attrVal) {
+        List<Course> userList = new ArrayList<Course>();
         Connection conn = null;
         Statement stmt = null;
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
             stmt = conn.createStatement();
-            String sql;
+            String sql = "SELECT\n" +
+                    "  c.USER_ID,\n" +
+                    "  c.ID,\n" +
+                    "  c.DISCIPLINE_ID,\n" +
+                    "  c.NAME,\n" +
+                    "  c.DESCRIPTION,\n" +
+                    "  c.CREATE_DATE,\n" +
+                    "  CONCAT(u.FIRST_NAME, ' ', u.LAST_NAME) AS 'userName',\n" +
+                    "  d.NAME as 'disciplineName'\n" +
+                    "FROM COURSE c JOIN USERS u ON c.USER_ID = u.USER_ID\n" +
+                    "  JOIN DISCIPLINE d ON d.DISCIPLINE_ID = c.DISCIPLINE_ID";
             if (attrName != null && attrVal != null) {
-                sql = "SELECT * FROM USERS WHERE " + attrName + "='" + attrVal + "'";
-            } else {
-                sql = "SELECT * FROM USERS";
+                sql = sql + " WHERE " + attrName + "='" + attrVal + "'";
             }
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                User u = new User();
+                Course u = new Course();
                 u.setUserId(rs.getInt("USER_ID"));
-                u.setFirstName(rs.getString("FIRST_NAME"));
-                u.setLastName(rs.getString("LAST_NAME"));
-                u.setAge(rs.getInt("AGE"));
-                u.setLogin(rs.getString("LOGIN"));
-                u.setPassword(rs.getString("PASSWORD"));
-                if (rs.getString("USER_TYPE") != null)
-                    u.setUserType(UserType.valueOf(rs.getString("USER_TYPE")));
+                u.setId(rs.getInt("ID"));
+                u.setDisciplineId(rs.getInt("DISCIPLINE_ID"));
+                u.setName(rs.getString("NAME"));
+                u.setDescription(rs.getString("DESCRIPTION"));
+                u.setCreateDate(rs.getTimestamp("CREATE_DATE"));
+                u.setDisciplineName(rs.getString("disciplineName"));
+                u.setUserDisplayName(rs.getString("userName"));
+
                 userList.add(u);
             }
             rs.close();
