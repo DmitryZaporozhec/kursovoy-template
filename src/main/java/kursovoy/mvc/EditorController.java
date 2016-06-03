@@ -3,8 +3,6 @@ package kursovoy.mvc;
 import kursovoy.constants.ContentType;
 import kursovoy.jdbc.*;
 import kursovoy.model.*;
-import kursovoy.utils.CookieUtil;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,9 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.util.Date;
+import java.rmi.server.UID;
 import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/editor")
@@ -23,12 +22,12 @@ public class EditorController {
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public String getUser(Model model, @RequestParam(value = "id", required = false) String id,
-                          @RequestParam(value = "parentId", required = true) final int parentId,
-                          @RequestParam(value = "type", required = true) final String type) {
+                          @RequestParam(value = "parentId", required = false) final Integer parentId,
+                          @RequestParam(value = "type", required = false) final String type) {
         JDBCContentUtil contentUtil = new JDBCContentUtil();
-        FloalaContent content = null;
+        FroalaModel content = null;
         if (id == null) {
-            content = new FloalaContent();
+            content = new FroalaModel();
             content.setCourseId(parentId);
             content.setType(ContentType.valueOf(type));
         } else {
@@ -37,16 +36,30 @@ public class EditorController {
         }
         int idforMenu = content.getCourseId();
         //fill menu
-        List<FloalaContent> con = contentUtil.get("COURSE_ID", String.valueOf(idforMenu));
+        List<FroalaModel> con = contentUtil.get("COURSE_ID", String.valueOf(idforMenu));
         model.addAttribute("menu", con);
         model.addAttribute("content", content);
         return "editor";
     }
 
-    @RequestMapping(value = "/images", method = RequestMethod.GET)
-    public String getUser(HttpServletResponse response, @RequestParam("name") final String name) throws Exception {
+    @RequestMapping(value = "/get/body", method = RequestMethod.GET)
+    public
+    @ResponseBody
+    String getBody(Model model, @RequestParam(value = "id", required = true) int id) {
+        if (id == 0) {
+            //FIXME add here template
+            return "";
+        }
+        JDBCContentUtil contentUtil = new JDBCContentUtil();
+        FroalaModel content = null;
+        content = contentUtil.get(String.valueOf(id));
+        return content.getBody();
+    }
+
+    @RequestMapping(value = "/images/{id}", method = RequestMethod.GET)
+    public String getUser(HttpServletResponse response, @PathVariable("id") final String name) throws Exception {
         int BUFF_SIZE = 1024;
-        Photo photo = new JDBCPhotoUtil().getPhoto(name);
+        Photo photo = new JDBCPhotoUtil().getPhoto(Integer.valueOf(name));
         response.setContentType("image/" + ("jpg".equalsIgnoreCase(photo.getFileType())
                 ? "jpeg" :
                 photo.getFileType()));
@@ -85,19 +98,37 @@ public class EditorController {
             response.setLink("/img/download.png");
             return response;
         }
-        photo.setFileName(file.getOriginalFilename());
+        photo.setFileName(UUID.randomUUID().toString());
         photo.setContent(file.getInputStream());
-        new JDBCPhotoUtil().save(photo);
-
-        response.setLink("/editor/images?name=" + file.getOriginalFilename());
-
+        photo = new JDBCPhotoUtil().save(photo);
+        response.setLink("/editor/images/" + photo.getId());
         return response;
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(HttpServletRequest request, FloalaContent content) throws Exception {
+    public
+    @ResponseBody
+    String save(HttpServletRequest request, @RequestBody FroalaModel content) throws Exception {
         JDBCContentUtil util = new JDBCContentUtil();
         int id = util.save(content).getId();
-        return String.format("redirect:/editor/get?type=%s&parentId=%s&id=%s", content.getType().name(), content.getCourseId(), String.valueOf(id));
+        return String.format("/editor/get?id=%s", String.valueOf(id));
+    }
+
+    @RequestMapping(value = "/delete/{id}", method = RequestMethod.GET)
+    public String delete(HttpServletRequest request, @PathVariable("id") String id) throws Exception {
+        JDBCContentUtil contentUtil = new JDBCContentUtil();
+        FroalaModel content = null;
+        content = contentUtil.get(id);
+        contentUtil.delete(Integer.valueOf(id));
+        return String.format("redirect:/course/get?id=%s", content.getCourseId());
+    }
+
+    @RequestMapping(value = "/preview/{id}", method = RequestMethod.GET)
+    public String preview(Model model, @PathVariable("id") String id) throws Exception {
+        JDBCContentUtil contentUtil = new JDBCContentUtil();
+        FroalaModel content = null;
+        content = contentUtil.get(id);
+        model.addAttribute("content", content);
+        return "preview";
     }
 }

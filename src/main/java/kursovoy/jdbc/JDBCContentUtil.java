@@ -1,9 +1,7 @@
 package kursovoy.jdbc;
 
 import kursovoy.constants.ContentType;
-import kursovoy.constants.UserType;
-import kursovoy.model.FloalaContent;
-import kursovoy.model.User;
+import kursovoy.model.FroalaModel;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -18,15 +16,15 @@ public class JDBCContentUtil {
     final static String userName = "root";
     final static String password = "root";
 
-    public List<FloalaContent> getAll() {
+    public List<FroalaModel> getAll() {
         return get(null, null);
     }
 
-    public FloalaContent get(String userId) {
+    public FroalaModel get(String userId) {
         return get("ID", userId).get(0);
     }
 
-    public FloalaContent save(FloalaContent u) {
+    public FroalaModel save(FroalaModel u) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -115,8 +113,8 @@ public class JDBCContentUtil {
         }
     }
 
-    public List<FloalaContent> get(String attrName, String attrVal) {
-        List<FloalaContent> userList = new ArrayList<FloalaContent>();
+    public List<FroalaModel> get(String attrName, String attrVal) {
+        List<FroalaModel> userList = new ArrayList<FroalaModel>();
         Connection conn = null;
         Statement stmt = null;
         try {
@@ -131,7 +129,7 @@ public class JDBCContentUtil {
             }
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                FloalaContent u = new FloalaContent();
+                FroalaModel u = new FroalaModel();
                 u.setId(rs.getInt("ID"));
                 u.setCourseId(rs.getInt("COURSE_ID"));
                 u.setBody(rs.getString("CONTENT"));

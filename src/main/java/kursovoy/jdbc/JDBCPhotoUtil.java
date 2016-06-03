@@ -146,4 +146,45 @@ public class JDBCPhotoUtil {
         }
     }
 
+
+    public Photo getPhoto(int id) {
+        Photo p = new Photo();
+        Connection conn = null;
+        PreparedStatement stmt = null;
+        try {
+            Class.forName(jdbcDriver);
+            conn = DriverManager.getConnection(connectionString, userName, password);
+            String sql = "SELECT * FROM PHOTO WHERE ID=?";
+            stmt = conn.prepareStatement(sql);
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+            while (rs.next()) {
+                p.setContent(rs.getBlob("CONTENT").getBinaryStream());
+                p.setFileName(rs.getString("FILE_NAME"));
+                p.setFileType(rs.getString("FILE_TYPE"));
+                p.setId(rs.getInt("ID"));
+            }
+            rs.close();
+            stmt.close();
+            conn.close();
+        } catch (SQLException se) {
+            se.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            try {
+                if (stmt != null)
+                    stmt.close();
+            } catch (SQLException se2) {
+                try {
+                    if (conn != null)
+                        conn.close();
+                } catch (SQLException se) {
+                    se.printStackTrace();
+                }
+            }
+            return p;
+        }
+    }
+
 }

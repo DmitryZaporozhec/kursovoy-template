@@ -93,16 +93,26 @@
             </c:if>
         </div>
         <div class="col-sm-8">
-            <input type="text" id="nameVal" value="${content.contentName}">
             <legend>Редактирование ${content.type} - ${content.contentName}</legend>
-            <textarea id="edit" value="${content.body}"></textarea>
-            <input type="hidden" id="id" value="${content.id}">
-            <input type="hidden" id="courseId" value="${content.courseId}">
-            <input type="hidden" id="type" value="${content.type}">
-            <div class="control form-row">
-                <button type="button" id="saveBTN" class="btn btn-primary">Сохранить</button>
-                <a class="btn btn-danger" href="/discipline/delete?id=${discipline.disciplineId}">Удалить</a>
-            </div>
+            <fieldset>
+                <div class="form-row">
+                    <label for="nameVal">Название</label>
+                    <input type="text" id="nameVal" value="${content.contentName}"></div>
+                <div class="form-row">
+                    <textarea id="edit" value=""></textarea>
+                </div>
+                <input type="hidden" id="id" value="${content.id}">
+                <input type="hidden" id="courseId" value="${content.courseId}">
+                <input type="hidden" id="type" value="${content.type}">
+                <div class="control form-row">
+                    <button type="button" id="saveBTN" class="btn btn-primary">Сохранить</button>
+                    <c:if test="${content.id!=0}">
+                        <button type="button" onclick="window.open('/editor/preview/${content.id}')" id="saveBTN"
+                                class="btn btn-primary">Просмотреть</button>
+                        <a class="btn btn-danger" href="/editor/delete/${content.id}">Удалить</a>
+                    </c:if>
+                </div>
+            </fieldset>
         </div>
     </div>
 </div>

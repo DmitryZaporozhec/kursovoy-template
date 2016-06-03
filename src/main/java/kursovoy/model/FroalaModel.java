@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * Created by zaporozhec on 6/3/16.
  */
-public class FloalaContent implements Serializable {
+public class FroalaModel implements Serializable {
     int id;
     String body;
     ContentType type;
