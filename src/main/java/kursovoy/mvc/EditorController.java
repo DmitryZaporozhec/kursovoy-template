@@ -12,13 +12,19 @@ import org.springframework.web.multipart.MultipartHttpServletRequest;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.*;
-import java.rmi.server.UID;
 import java.util.List;
 import java.util.UUID;
 
 @Controller
 @RequestMapping(value = "/editor")
-public class EditorController {
+public class EditorController extends BaseMenuController {
+
+    private final int LECTURE = 1;
+    private final int TASK = 2;
+    private final int LITERATURE = 3;
+    private final int PRACTICE = 4;
+    private final int LABORATORY = 5;
+    private final int WEBINAR = 6;
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public String getUser(Model model, @RequestParam(value = "id", required = false) String id,
@@ -28,31 +34,53 @@ public class EditorController {
         FroalaModel content = null;
         if (id == null) {
             content = new FroalaModel();
-            content.setCourseId(parentId);
+            content.setModuleId(parentId);
             content.setType(ContentType.valueOf(type));
         } else {
             content = contentUtil.get(id);
 
         }
-        int idforMenu = content.getCourseId();
         //fill menu
-        List<FroalaModel> con = contentUtil.get("COURSE_ID", String.valueOf(idforMenu));
-        model.addAttribute("menu", con);
         model.addAttribute("content", content);
+        getMenu(model, 0, content.getModuleId());
         return "editor";
     }
 
     @RequestMapping(value = "/get/body", method = RequestMethod.GET)
     public
     @ResponseBody
-    String getBody(Model model, @RequestParam(value = "id", required = true) int id) {
+    String getBody(Model model, @RequestParam(value = "id", required = true) int id,
+                   @RequestParam(value = "type", required = true) String type) {
         if (id == 0) {
-            //FIXME add here template
-            return "";
+            String retVal = "";
+            ContentType c = ContentType.valueOf(type);
+            switch (c) {
+                case LABORATORY:
+                    retVal = new JDBCTemplateUtil().getTemplate(LABORATORY);
+                    break;
+                case LECTURE:
+                    retVal = new JDBCTemplateUtil().getTemplate(LECTURE);
+                    break;
+                case LITERATURE:
+                    retVal = new JDBCTemplateUtil().getTemplate(LITERATURE);
+                    break;
+                case PRACTICE:
+                    retVal = new JDBCTemplateUtil().getTemplate(PRACTICE);
+                    break;
+                case TASK:
+                    retVal = new JDBCTemplateUtil().getTemplate(TASK);
+                    break;
+                case WEBINAR:
+                    retVal = new JDBCTemplateUtil().getTemplate(WEBINAR);
+                    break;
+                default:
+                    break;
+            }
+            return retVal;
         }
         JDBCContentUtil contentUtil = new JDBCContentUtil();
         FroalaModel content = null;
-        content = contentUtil.get(String.valueOf(id));
+        content = contentUtil.getBody(id);
         return content.getBody();
     }
 
@@ -119,15 +147,16 @@ public class EditorController {
         JDBCContentUtil contentUtil = new JDBCContentUtil();
         FroalaModel content = null;
         content = contentUtil.get(id);
+        Module m = new JDBCModuleUtil().getModule(String.valueOf(content.getModuleId()));
         contentUtil.delete(Integer.valueOf(id));
-        return String.format("redirect:/course/get?id=%s", content.getCourseId());
+        return String.format("redirect:/course/get?id=%s", m.getCourseId());
     }
 
     @RequestMapping(value = "/preview/{id}", method = RequestMethod.GET)
     public String preview(Model model, @PathVariable("id") String id) throws Exception {
         JDBCContentUtil contentUtil = new JDBCContentUtil();
         FroalaModel content = null;
-        content = contentUtil.get(id);
+        content = contentUtil.getBody(Integer.valueOf(id));
         model.addAttribute("content", content);
         return "preview";
     }

@@ -1,13 +1,7 @@
 package kursovoy.mvc;
 
-import kursovoy.jdbc.JDBCContentUtil;
-import kursovoy.jdbc.JDBCCourseUtil;
-import kursovoy.jdbc.JDBCDisciplineUtil;
-import kursovoy.jdbc.JDBCNewsUtil;
-import kursovoy.model.Course;
-import kursovoy.model.Discipline;
-import kursovoy.model.FroalaModel;
-import kursovoy.model.News;
+import kursovoy.jdbc.*;
+import kursovoy.model.*;
 import kursovoy.utils.CookieUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,7 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping(value = "/course")
-public class CourseController {
+public class CourseController extends BaseMenuController {
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String get(HttpServletRequest request, Model model) {
@@ -40,8 +34,7 @@ public class CourseController {
         List<Discipline> disciplines = new JDBCDisciplineUtil().getAllDisciplines();
         model.addAttribute("course", d);
         model.addAttribute("disciplines", disciplines);
-        List<FroalaModel> con = new JDBCContentUtil().get("COURSE_ID", String.valueOf(d.getId()));
-        model.addAttribute("menu", con);
+        getMenu(model, d.getId(), 0);
         return "course";
     }
 
@@ -85,5 +78,25 @@ public class CourseController {
         return "OK";
     }
 
+    @RequestMapping(value = "/addModule", method = RequestMethod.GET)
+    public String addModule(Model model, @RequestParam(value = "parentId", required = false) final String id) {
+        List<Module> modules = new JDBCModuleUtil().getModule("COURSE_ID", String.valueOf(id));
+        int lastNum = 1;
+        if (modules != null) {
+            lastNum = modules.size() + 1;
+            Module m = new Module();
+            m.setCourseId(Integer.parseInt(id));
+            m.setDisplaOrder(lastNum);
+            new JDBCModuleUtil().saveModule(m);
+        }
+        return "redirect:/course/get?id=" + id;
+    }
+
+    @RequestMapping(value = "/deleteModule", method = RequestMethod.GET)
+    public String geleteModule(Model model, @RequestParam(value = "id", required = false) final String id) {
+        Module m = new JDBCModuleUtil().getModule(id);
+        new JDBCModuleUtil().delete(Integer.valueOf(id));
+        return "redirect:/course/get?id=" + m.getCourseId();
+    }
 
 }

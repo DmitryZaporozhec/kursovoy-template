@@ -12,7 +12,7 @@ public class FroalaModel implements Serializable {
     String body;
     ContentType type;
     String contentName;
-    int courseId;
+    int moduleId;
 
     public int getId() {
         return id;
@@ -39,12 +39,12 @@ public class FroalaModel implements Serializable {
     }
 
 
-    public int getCourseId() {
-        return courseId;
+    public int getModuleId() {
+        return moduleId;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setModuleId(int moduleId) {
+        this.moduleId = moduleId;
     }
 
     public String getContentName() {

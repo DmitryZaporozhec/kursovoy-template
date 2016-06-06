@@ -18,7 +18,7 @@ $(document).ready(function () {
             data: JSON.stringify({
                 id: $("#id").val(),
                 contentName: $("#nameVal").val(),
-                courseId: $("#courseId").val(),
+                moduleId: $("#moduleId").val(),
                 type: $("#type").val(),
                 body: $("#edit").froalaEditor('html.get')
             }),
@@ -34,7 +34,7 @@ $(document).ready(function () {
     });
     if ($("#id").val()) {
         $.ajax({
-            url: "/editor/get/body?id=" + $("#id").val(),
+            url: "/editor/get/body?id=" + $("#id").val() + "&type=" + $("#type").val(),
             type: "GET",
             dataType: "text",
             contentType: "application/json",

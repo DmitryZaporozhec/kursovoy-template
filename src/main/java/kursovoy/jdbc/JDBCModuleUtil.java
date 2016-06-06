@@ -1,30 +1,35 @@
 package kursovoy.jdbc;
 
-import kursovoy.constants.ContentType;
+import kursovoy.model.Course;
 import kursovoy.model.FroalaModel;
+import kursovoy.model.Module;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
  * Created by zaporozhec on 5/6/15.
  */
-public class JDBCContentUtil {
+public class JDBCModuleUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
     final static String userName = "root";
     final static String password = "root";
 
-    public List<FroalaModel> getAll() {
-        return get(null, null);
+    public List<Module> getAllModules() {
+        return getModule(null, null);
     }
 
-    public FroalaModel get(String userId) {
-        return get("ID", userId).get(0);
+    public Module getModule(String userId) {
+        List<Module> courses = getModule("ID", userId);
+        if (courses != null && courses.size() > 0)
+            return courses.get(0);
+        return null;
     }
 
-    public FroalaModel save(FroalaModel u) {
+    public Module saveModule(Module u) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -33,12 +38,10 @@ public class JDBCContentUtil {
 
             String sql;
             if (u.getId() == 0) {
-                sql = "INSERT INTO CONTENT_STORAGE(COURSE_ID,TYPE,CONTENT,NAME) VALUES (?,?,?,?)";
+                sql = "INSERT INTO MODULE(COURSE_ID,DISPLAY_ORDER) VALUES (?,?)";
                 stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                stmt.setInt(1, u.getModuleId());
-                stmt.setString(2, u.getType().name());
-                stmt.setString(3, u.getBody());
-                stmt.setString(4, u.getContentName());
+                stmt.setInt(1, u.getCourseId());
+                stmt.setInt(2, u.getDisplaOrder());
                 stmt.executeUpdate();
                 ResultSet resultSet = stmt.getGeneratedKeys();
                 {
@@ -49,13 +52,11 @@ public class JDBCContentUtil {
                 }
                 //add user
             } else {
-                sql = "UPDATE CONTENT_STORAGE SET COURSE_ID =?, TYPE=?, CONTENT=?, NAME=?  WHERE ID = ?";
-                stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-                stmt.setInt(1, u.getModuleId());
-                stmt.setString(2, u.getType().name());
-                stmt.setString(3, u.getBody());
-                stmt.setString(4, u.getContentName());
-                stmt.setInt(5, u.getId());
+                sql = "UPDATE MODULE SET COURSE_ID=?, DISPLAY_ORDER=?  WHERE ID = ?";
+                stmt = conn.prepareStatement(sql);
+                stmt.setInt(1, u.getCourseId());
+                stmt.setInt(2, u.getDisplaOrder());
+                stmt.setInt(3, u.getId());
                 stmt.executeUpdate();
                 //update user
             }
@@ -81,16 +82,16 @@ public class JDBCContentUtil {
         return u;
     }
 
-    public void delete(int userId) {
+    public void delete(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
 
-            String sql = "DELETE FROM CONTENT_STORAGE WHERE ID=?";
+            String sql = "DELETE FROM MODULE WHERE ID=?";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, userId);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
             stmt.close();
             conn.close();
@@ -113,28 +114,27 @@ public class JDBCContentUtil {
         }
     }
 
-    public List<FroalaModel> get(String attrName, String attrVal) {
-        List<FroalaModel> userList = new ArrayList<FroalaModel>();
+    public List<Module> getModule(String attrName, String attrVal) {
+        List<Module> userList = new ArrayList<Module>();
         Connection conn = null;
         Statement stmt = null;
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
             stmt = conn.createStatement();
-            String sql;
+            String sql = "SELECT ID, COURSE_ID, DISPLAY_ORDER FROM MODULE";
             if (attrName != null && attrVal != null) {
-                sql = "SELECT ID,COURSE_ID,TYPE,NAME FROM CONTENT_STORAGE WHERE " + attrName + "='" + attrVal + "'";
-            } else {
-                sql = "SELECT ID,COURSE_ID,TYPE,NAME FROM CONTENT_STORAGE";
+                sql = sql + " WHERE " + attrName + "='" + attrVal + "'";
             }
-            sql += " ORDER BY TYPE";
+            sql += " ORDER BY DISPLAY_ORDER";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                FroalaModel u = new FroalaModel();
+                Module u = new Module();
                 u.setId(rs.getInt("ID"));
-                u.setModuleId(rs.getInt("COURSE_ID"));
-                u.setType(ContentType.valueOf(rs.getString("TYPE")));
-                u.setContentName(rs.getString("NAME"));
+                u.setCourseId(rs.getInt("COURSE_ID"));
+                u.setDisplaOrder(rs.getInt("DISPLAY_ORDER"));
+                List<FroalaModel> content = new JDBCContentUtil().get("COURSE_ID", String.valueOf(u.getId()));
+                u.setContent(content);
                 userList.add(u);
             }
             rs.close();
@@ -160,18 +160,24 @@ public class JDBCContentUtil {
         }
     }
 
-    public FroalaModel getBody(int id) {
-        FroalaModel model = new FroalaModel();
+    public List<Module> getMenu(int moduleId) {
+        List<Module> userList = new ArrayList<Module>();
         Connection conn = null;
         Statement stmt = null;
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
             stmt = conn.createStatement();
-            String sql = "SELECT CONTENT FROM CONTENT_STORAGE WHERE ID=" + id;
+            String sql = "SELECT * FROM MODULE WHERE COURSE_ID IN (SELECT COURSE_ID FROM MODULE WHERE ID=" + moduleId + ")";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                model.setBody(rs.getString(1));
+                Module u = new Module();
+                u.setId(rs.getInt("ID"));
+                u.setCourseId(rs.getInt("COURSE_ID"));
+                u.setDisplaOrder(rs.getInt("DISPLAY_ORDER"));
+                List<FroalaModel> content = new JDBCContentUtil().get("COURSE_ID", String.valueOf(u.getId()));
+                u.setContent(content);
+                userList.add(u);
             }
             rs.close();
             stmt.close();
@@ -192,8 +198,7 @@ public class JDBCContentUtil {
                     se.printStackTrace();
                 }
             }
-            return model;
+            return userList;
         }
     }
-
 }
