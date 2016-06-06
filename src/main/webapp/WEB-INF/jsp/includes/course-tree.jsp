@@ -1,6 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@page pageEncoding="UTF-8" %>
-<div id="course-tree" class="navbar navbar-inverse">
+<div id="course-tree" class="navbar">
     <ul class="nav">
         <li><a href="/course/get?id=${courseId}"><span class="glyphicon glyphicon-edit"> Описание курса</span></a>
         </li>
@@ -26,7 +26,7 @@
                 <li class="divider"></li>
 
                 <li><a href="/editor/get?type=LECTURE&parentId=${i.id}"><span
-                        class="glyphicon glyphicon-plus"> Добавить лекцию</span></a>
+                        class="glyphicon glyphicon-plus "> Добавить лекцию</span></a>
                 </li>
                 <li><a href="/editor/get?type=TASK&parentId=${i.id}"><span
                         class="glyphicon glyphicon-plus"> Добавить задание</span></a>

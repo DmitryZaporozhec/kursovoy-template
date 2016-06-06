@@ -12,7 +12,9 @@
 </head>
 <body>
 <div class="container-fluid">
+    <jsp:include page="includes/head.jsp"/>
     <div class="row">
+
         <div class="col-sm-2">
             <jsp:include page="includes/menu.jsp"/>
         </div>

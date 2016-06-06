@@ -81,7 +81,8 @@
 </head>
 <body>
 <div class="container-fluid">
-    <div class="row">
+    <jsp:include page="includes/head.jsp"/>
+    <div class="row no-float">
         <div class="col-sm-2">
             <c:if test="${CURRENT_USER_ID!= null}">
                 <jsp:include page="includes/menu.jsp"/>

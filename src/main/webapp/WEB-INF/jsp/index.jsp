@@ -19,6 +19,7 @@
 
 
 <div class="container-fluid">
+    <jsp:include page="includes/head.jsp"/>
     <div class="row">
         <div class="col-sm-2">
             <c:if test="${CURRENT_USER_ID!= null}">
@@ -33,7 +34,7 @@
                     <p>
                 <span class="label label-info">
                     <fmt:formatDate pattern="yyyy MM dd HH:mm"
-                                    value="${news.createDate}"/>  - ${news.caption}</span>  ${news.text}
+                                    value="${news.createDate}"/>  - ${news.caption}</span> ${news.text}
                     </p>
                 </c:forEach>
             </div>

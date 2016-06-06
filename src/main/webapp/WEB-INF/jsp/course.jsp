@@ -13,7 +13,9 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
 </head>
 <body>
+
 <div class="container-fluid">
+    <jsp:include page="includes/head.jsp"/>
     <div class="row">
         <div class="col-sm-2">
             <c:if test="${CURRENT_USER_ID!= null}">

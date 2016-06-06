@@ -2,6 +2,10 @@
     float: left;
 }
 
+.glyphicon {
+    font-size: 16px !important;
+}
+
 .clear {
     clear: both;
 }
@@ -106,3 +110,4 @@ select:disabled {
 #course-tree .dropdown-menu span.glyphicon {
     color: #000;
 }
+
