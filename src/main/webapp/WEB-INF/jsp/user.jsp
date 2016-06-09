@@ -55,6 +55,17 @@
                         </select>
                     </div>
                     <div class="form-row">
+                        <label for="groupId">Группа</label>
+                        <select name="groupId" id="groupId">
+                            <option value="">выбрать...</option>
+                            <c:forEach items="${groups}" var="item">
+                                <option value="${item.id}" <c:if test="${user.groupId eq item.id}">
+                                    selected="selected"
+                                </c:if> >${item.name}</option>
+                            </c:forEach>
+                        </select>
+                    </div>
+                    <div class="form-row">
                         <label for="password">Пароль</label>
                         <input id="password" type="password" value="${user.password}">
                     </div>

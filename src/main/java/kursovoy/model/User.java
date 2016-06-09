@@ -10,7 +10,8 @@ public class User {
     private int age;
     private String login;
     private String password;
-
+    private int groupId;
+    private String groupName;
     private UserType userType = UserType.STUDENT;
 
     public User() {
@@ -79,4 +80,19 @@ public class User {
         this.userType = userType;
     }
 
+    public int getGroupId() {
+        return groupId;
+    }
+
+    public void setGroupId(int groupId) {
+        this.groupId = groupId;
+    }
+
+    public String getGroupName() {
+        return groupName;
+    }
+
+    public void setGroupName(String groupName) {
+        this.groupName = groupName;
+    }
 }

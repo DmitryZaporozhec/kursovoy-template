@@ -1,6 +1,7 @@
 package kursovoy.mvc;
 
 import kursovoy.constants.UserType;
+import kursovoy.jdbc.JDBCGroupUtil;
 import kursovoy.jdbc.JDBCNewsUtil;
 import kursovoy.jdbc.JDBCUserUtil;
 import kursovoy.model.User;
@@ -40,6 +41,7 @@ public class UserController {
             u.setPassword(new String(Base64.decodeBase64(u.getPassword())));
         model.addAttribute("userTypes", UserType.values());
         model.addAttribute("user", u);
+        model.addAttribute("groups",new JDBCGroupUtil().getAll());
         return "user";
     }
 

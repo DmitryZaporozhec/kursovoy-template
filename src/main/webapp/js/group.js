@@ -3,17 +3,17 @@
  */
 $(document).ready(function () {
 
-    $("#edit-user-form").on("submit", function () {
+    $("#edit-group-form").on("submit", function () {
         $(".alert").hide();
         $.ajax({
-            url: "/user",
+            url: "/group/save",
             type: "POST",
             dataType: "text",
             contentType: "application/json",
             data: toJson(),
             success: function (data, status, jqXHR) {
                 $(".alert-success").show()
-                window.location.href = "/userList"
+                window.location.href = "/group/list"
             },
             error: function (data) {
                 $(".alert-error").show()
@@ -25,14 +25,9 @@ $(document).ready(function () {
 
 function toJson() {
     return JSON.stringify({
-        login: $("#login").val(),
-        password: $("#password").val(),
-        userId: $("#userId").val(),
-        firstName: $("#name").val(),
-        lastName: $("#lastName").val(),
-        age: $("#age").val(),
-        userType: $("#userType").val(),
-        groupId: $("#groupId").val()
+        id: $("#id").val(),
+        name: $("#name").val(),
+        description: $("#description").val(),
     });
 
 }

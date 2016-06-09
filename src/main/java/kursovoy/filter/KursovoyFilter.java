@@ -67,6 +67,7 @@ public final class KursovoyFilter implements Filter {
         if (u != null) {
             request.setAttribute("HEADER_USER_NAME", u.getFirstName() + " " + u.getLastName());
             request.setAttribute("CURRENT_USER_ID", u.getUserId());
+            request.setAttribute("CURRENT_USER_TYPE", u.getUserType().name());
         }
     }
 

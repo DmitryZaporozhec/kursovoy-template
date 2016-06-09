@@ -3,7 +3,7 @@
 <%@page pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
-    <title>Управление пользователями</title>
+    <title>Группы</title>
     <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script language="javascript" src="/js/bootstrap-dropdown.js" type="text/javascript"></script>
@@ -17,27 +17,21 @@
             <jsp:include page="includes/menu.jsp"/>
         </div>
         <div class="col-md-10">
-            <h3>Список пользователей</h3>
+            <h3>Список групп</h3>
             <table class="table">
                 <thead>
                 <tr>
-                    <th>Логин</th>
-                    <th>Имя</th>
-                    <th>Фамилия</th>
-                    <th>Тип Пользователя</th>
-                    <th>Группа</th>
+                    <th>Название</th>
+                    <th>Описание</th>
                     <th>Действия</th>
                 </tr>
                 </thead>
-                <c:forEach var="user" items="${users}">
+                <c:forEach var="group" items="${groups}">
                     <tr>
-                        <td>${user.login} </td>
-                        <td>${user.firstName} </td>
-                        <td> ${user.lastName} </td>
-                        <td> ${user.userType.name()}</td>
-                        <td> ${user.groupName}</td>
-                        <td><a href="/user?userId=${user.userId}"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a href="/delete?userId=${user.userId}"><i class="glyphicon glyphicon-remove"></i></a>
+                        <td>${group.name} </td>
+                        <td>${group.description} </td>
+                        <td><a href="/group/get?id=${group.id}"><i class="glyphicon glyphicon-edit"></i></a>
+                            <a href="/group/delete?id=${group.id}"><i class="glyphicon glyphicon-remove"></i></a>
                         </td>
                     </tr>
                 </c:forEach>

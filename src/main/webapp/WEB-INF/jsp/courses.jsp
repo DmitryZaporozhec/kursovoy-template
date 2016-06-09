@@ -28,7 +28,7 @@
                     <th>Описание</th>
                     <th>Создатель</th>
                     <th>Дисциплина</th>
-                    <th>Обнволено</th>
+                    <th>Обновлено</th>
                     <th>Действия</th>
                 </tr>
                 </thead>
@@ -40,10 +40,15 @@
                         <td>${course.disciplineName} </td>
                         <td><fmt:formatDate pattern="yyyy MM dd HH:mm"
                                             value="${course.createDate}"/></td>
-                        <td><a href="/course/get?id=${course.id}"><i
-                                class="glyphicon glyphicon-edit"></i></a>
-                            <a href="/course/delete?id=${course.id}"><i
-                                    class="glyphicon glyphicon-remove"></i></a>
+                        <td>
+                            <c:if test="${CURRENT_USER_TYPE eq 'ADMIN' or CURRENT_USER_TYPE eq  'LECTURER' or CURRENT_USER_TYPE eq  'TUTOR'}">
+                                <a href="/course/get?id=${course.id}"><i
+                                        class="glyphicon glyphicon-edit"></i></a>
+                                <c:if test="${CURRENT_USER_TYPE eq 'ADMIN'}">
+                                    <a href="/course/delete?id=${course.id}"><i
+                                            class="glyphicon glyphicon-remove"></i></a>
+                                </c:if>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>

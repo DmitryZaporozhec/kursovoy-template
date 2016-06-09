@@ -1,30 +1,34 @@
 package kursovoy.jdbc;
 
-import kursovoy.constants.UserType;
-import kursovoy.model.User;
-import org.springframework.beans.factory.annotation.Value;
+import kursovoy.model.Course;
+import kursovoy.model.Group;
 
 import java.sql.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by zaporozhec on 5/6/15.
  */
-public class JDBCUserUtil {
+public class JDBCGroupUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
     final static String userName = "root";
     final static String password = "root";
 
-    public List<User> getAllUsers() {
-        return getUser(null, null);
+    public List<Group> getAll() {
+        return get(null, null);
     }
 
-    public List<User> getUser(String userId) {
-        return getUser("USER_ID", userId);
+    public Group get(String id) {
+        List<Group> courses = get("ID", id);
+        if (courses != null && courses.size() > 0)
+            return courses.get(0);
+        return null;
     }
 
-    public User saveUser(User u) {
+    public Group save(Group u) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
@@ -32,36 +36,26 @@ public class JDBCUserUtil {
             conn = DriverManager.getConnection(connectionString, userName, password);
 
             String sql;
-            if (u.getUserId() == 0) {
-                sql = "INSERT INTO USERS(FIRST_NAME,LAST_NAME,AGE,LOGIN,PASSWORD,USER_TYPE, GROUP_ID) VALUES (?,?,?,?,?,?,?)";
-                stmt = conn.prepareStatement(sql);
-                stmt.setString(1, u.getFirstName());
-                stmt.setString(2, u.getLastName());
-                stmt.setInt(3, u.getAge());
-                stmt.setString(4, u.getLogin());
-                stmt.setString(5, u.getPassword());
-                stmt.setString(6, u.getUserType().name());
-                stmt.setInt(7, u.getGroupId());
+            if (u.getId() == 0) {
+                sql = "INSERT INTO KURSOVOY.GROUP (NAME,DESCRIPTION) VALUES (?,?)";
+                stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
+                stmt.setString(1, u.getName());
+                stmt.setString(2, u.getDescription());
                 stmt.executeUpdate();
                 ResultSet resultSet = stmt.getGeneratedKeys();
                 {
                     while (resultSet.next()) {
-                        u.setUserId(resultSet.getInt(1));
+                        u.setId(resultSet.getInt(1));
                         break;
                     }
                 }
                 //add user
             } else {
-                sql = "UPDATE USERS SET FIRST_NAME =?, LAST_NAME=?, AGE=?, LOGIN=?, PASSWORD=?,USER_TYPE=?,GROUP_ID=? WHERE USER_ID = ?";
+                sql = "UPDATE KURSOVOY.GROUP  SET NAME =?, DESCRIPTION=? WHERE ID = ?";
                 stmt = conn.prepareStatement(sql);
-                stmt.setString(1, u.getFirstName());
-                stmt.setString(2, u.getLastName());
-                stmt.setInt(3, u.getAge());
-                stmt.setString(4, u.getLogin());
-                stmt.setString(5, u.getPassword());
-                stmt.setString(6, u.getUserType().name());
-                stmt.setInt(7, u.getGroupId());
-                stmt.setInt(8, u.getUserId());
+                stmt.setString(1, u.getName());
+                stmt.setString(2, u.getDescription());
+                stmt.setInt(3, u.getId());
                 stmt.executeUpdate();
                 //update user
             }
@@ -87,16 +81,16 @@ public class JDBCUserUtil {
         return u;
     }
 
-    public void delete(int userId) {
+    public void delete(int id) {
         Connection conn = null;
         PreparedStatement stmt = null;
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
 
-            String sql = "DELETE FROM USERS WHERE USER_ID=?";
+            String sql = "DELETE FROM KURSOVOY.GROUP  WHERE ID=?";
             stmt = conn.prepareStatement(sql);
-            stmt.setInt(1, userId);
+            stmt.setInt(1, id);
             stmt.executeUpdate();
             stmt.close();
             conn.close();
@@ -119,31 +113,25 @@ public class JDBCUserUtil {
         }
     }
 
-    public List<User> getUser(String attrName, String attrVal) {
-        List<User> userList = new ArrayList<User>();
+    public List<Group> get(String attrName, String attrVal) {
+        List<Group> userList = new ArrayList<Group>();
         Connection conn = null;
         Statement stmt = null;
         try {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
             stmt = conn.createStatement();
-            String sql="SELECT u.*, g.NAME as 'grpName' FROM USERS u JOIN KURSOVOY.GROUP g ON g.ID = u.GROUP_ID";
+            String sql = "SELECT * FROM KURSOVOY.GROUP  ";
             if (attrName != null && attrVal != null) {
-                sql = sql+ " WHERE " + attrName + "='" + attrVal + "'";
+                sql = sql + " WHERE " + attrName + "='" + attrVal + "'";
             }
+            sql += " ORDER BY NAME";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
-                User u = new User();
-                u.setUserId(rs.getInt("USER_ID"));
-                u.setFirstName(rs.getString("FIRST_NAME"));
-                u.setLastName(rs.getString("LAST_NAME"));
-                u.setAge(rs.getInt("AGE"));
-                u.setLogin(rs.getString("LOGIN"));
-                u.setPassword(rs.getString("PASSWORD"));
-                u.setGroupId(rs.getInt("GROUP_ID"));
-                u.setGroupName(rs.getString("grpName"));
-                if (rs.getString("USER_TYPE") != null)
-                    u.setUserType(UserType.valueOf(rs.getString("USER_TYPE")));
+                Group u = new Group();
+                u.setId(rs.getInt("ID"));
+                u.setName(rs.getString("NAME"));
+                u.setDescription(rs.getString("DESCRIPTION"));
                 userList.add(u);
             }
             rs.close();
