@@ -30,8 +30,14 @@
                     <tr>
                         <td>${group.name} </td>
                         <td>${group.description} </td>
-                        <td><a href="/group/get?id=${group.id}"><i class="glyphicon glyphicon-edit"></i></a>
-                            <a href="/group/delete?id=${group.id}"><i class="glyphicon glyphicon-remove"></i></a>
+                        <td>
+                            <c:if test="${CURRENT_USER_TYPE eq 'ADMIN'}">
+                                <a href="/group/get?id=${group.id}" title="Редактировать"><i class="glyphicon glyphicon-edit"></i></a>
+                                <a href="/group/delete?id=${group.id}" title="Удалить"><i class="glyphicon glyphicon-remove"></i></a>
+                            </c:if>
+                            <c:if test="${CURRENT_USER_TYPE eq 'ADMIN' or CURRENT_USER_TYPE eq  'LECTURER' or CURRENT_USER_TYPE eq  'TUTOR'}">
+                                 <a href="#" title="Добавить курс"><i class="glyphicon glyphicon-hand-right"></i></a>
+                            </c:if>
                         </td>
                     </tr>
                 </c:forEach>

@@ -1,13 +1,14 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page pageEncoding="UTF-8" %>
 <div id="course-tree" class="navbar">
     <ul class="nav">
-        <li><a href="/course/get?id=${courseId}"><span class="glyphicon glyphicon-edit"> Описание курса</span></a>
+        <li><a href="/course/get?id=${courseId}"><span class="glyphicon glyphicon-edit"></span><span class="span-text">Описание курса</span></a>
         </li>
         <c:forEach var="i" items="${menu}">
         <li role="presentation" class="dropdown">
             <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"
-               aria-expanded="false"><span class="glyphicon glyphicon-paperclip">
+               aria-expanded="false"><span class="glyphicon glyphicon-paperclip"></span><span class="span-text">
                 Модуль ${i.displaOrder}</span><span class="caret"></span>
             </a>
             <ul class="dropdown-menu">
@@ -21,36 +22,36 @@
                                 <c:if test="${'LABORATORY' eq ia.type}"> glyphicon glyphicon-export</c:if>
                                <c:if test="${'WEBINAR' eq ia.type}"> glyphicon-volume-up</c:if>
 
-                                "> ${ia.contentName}</span></a></li>
+                                "></span><span class="span-text-2nd"><fmt:message key="com.edu.${ia.type}"/> ${ia.contentName}</span></a></li>
                 </c:forEach>
                 <li class="divider"></li>
 
                 <li><a href="/editor/get?type=LECTURE&parentId=${i.id}"><span
-                        class="glyphicon glyphicon-plus "> Добавить лекцию</span></a>
+                        class="glyphicon glyphicon-plus "></span><span class="span-text-2nd">Добавить лекцию</span></a>
                 </li>
                 <li><a href="/editor/get?type=TASK&parentId=${i.id}"><span
-                        class="glyphicon glyphicon-plus"> Добавить задание</span></a>
+                        class="glyphicon glyphicon-plus"></span><span class="span-text-2nd">Добавить задание</span></a>
                 </li>
                 <li><a href="/editor/get?type=LITERATURE&parentId=${i.id}"><span
-                        class="glyphicon glyphicon-plus"> Добавить литературу</span></a>
+                        class="glyphicon glyphicon-plus"></span><span class="span-text-2nd">Добавить литературу</span></a>
                 </li>
                 <li><a href="/editor/get?type=PRACTICE&parentId=${i.id}"><span
-                        class="glyphicon glyphicon-plus"> Добавить практику</span></a>
+                        class="glyphicon glyphicon-plus"></span><span class="span-text-2nd">Добавить практику</span></a>
                 </li>
                 <li><a href="/editor/get?type=LABORATORY&parentId=${i.id}"><span
-                        class="glyphicon glyphicon-plus"> Добавить лабораторную работу</span></a>
+                        class="glyphicon glyphicon-plus"></span><span class="span-text-2nd">Добавить лабораторную работу</span></a>
                 </li>
                 <li><a href="/editor/get?type=WEBINAR&parentId=${i.id}"><span
-                        class="glyphicon glyphicon-plus"> Добавить вебинар</span></a>
+                        class="glyphicon glyphicon-plus"></span><span class="span-text-2nd">Добавить вебинар</span></a>
                 </li>
                 <li class="divider"></li>
                 <li><a href="/course/deleteModule?id=${i.id}"><span
-                        class="glyphicon glyphicon-trash"> Удалить модуль</span></a>
+                        class="glyphicon glyphicon-trash"></span><span class="span-text-2nd">Удалить модуль</span></a>
                 </li>
             </ul>
             </c:forEach>
         <li><a href="/course/addModule?parentId=${courseId}"><span
-                class="glyphicon glyphicon-plus"> Добавить модуль</span></a>
+                class="glyphicon glyphicon-plus"></span><span class="span-text">Добавить модуль</span></a>
         </li>
     </ul>
 </div>

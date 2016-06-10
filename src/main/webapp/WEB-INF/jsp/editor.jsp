@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
@@ -34,7 +35,7 @@
     <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
     <script language="javascript" src="/js/bootstrap-dropdown.js" type="text/javascript"></script>
-    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <%--<link href="/css/bootstrap-responsive.min.css" rel="stylesheet">--%>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <%--<script type="text/javascript" src="http://cdnjs.cloudflare.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>--%>
 
@@ -94,7 +95,7 @@
             </c:if>
         </div>
         <div class="col-sm-8">
-            <legend>Редактирование ${content.type} - ${content.contentName}</legend>
+            <legend>Редактирование <fmt:message key="com.edu.${content.type}"/> - ${content.contentName}</legend>
             <fieldset>
                 <div class="form-row">
                     <label for="nameVal">Название</label>

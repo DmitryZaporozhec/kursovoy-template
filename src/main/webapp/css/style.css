@@ -15,10 +15,6 @@
     background-color: #afafa2;
 }
 
-.container-login {
-    width: 225px !important;
-}
-
 form {
     padding-left: 25px;
 }
@@ -109,5 +105,26 @@ select:disabled {
 
 #course-tree .dropdown-menu span.glyphicon {
     color: #000;
+}
+
+span.span-text {
+    display: inline;
+    margin-left: 20px;
+    margin-right: 10px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+}
+
+span.span-text-2nd {
+    display: inline;
+    margin-left: 20px;
+    color: #000 !important;
+    margin-right: 10px;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 20px;
+}
+
+span.label {
+    font-size: 1.2em;
 }
 

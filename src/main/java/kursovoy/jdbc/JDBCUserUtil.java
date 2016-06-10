@@ -35,7 +35,7 @@ public class JDBCUserUtil {
             String sql;
             if (u.getUserId() == 0) {
                 sql = "INSERT INTO USERS(FIRST_NAME,LAST_NAME,AGE,LOGIN,PASSWORD,USER_TYPE, GROUP_ID) VALUES (?,?,?,?,?,?,?)";
-                stmt = conn.prepareStatement(sql);
+                stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stmt.setString(1, u.getFirstName());
                 stmt.setString(2, u.getLastName());
                 stmt.setInt(3, u.getAge());

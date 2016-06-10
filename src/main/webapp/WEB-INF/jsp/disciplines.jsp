@@ -32,11 +32,14 @@
                     <tr>
                         <td>${discipline.name} </td>
                         <td>${discipline.description} </td>
-                        <td><a href="/discipline/get?id=${discipline.disciplineId}"><i
-                                class="glyphicon glyphicon-edit"></i></a>
-                            <a href="/discipline/delete?id=${discipline.disciplineId}"><i
-                                    class="glyphicon glyphicon-remove"></i></a>
-                        </td>
+                        <c:if test="${CURRENT_USER_TYPE eq 'ADMIN'}">
+                            <td><a href="/discipline/get?id=${discipline.disciplineId}"><i
+                                    class="glyphicon glyphicon-edit"></i></a>
+                                <a href="/discipline/delete?id=${discipline.disciplineId}"><i
+                                        class="glyphicon glyphicon-remove"></i></a>
+
+                            </td>
+                        </c:if>
                     </tr>
                 </c:forEach>
             </table>

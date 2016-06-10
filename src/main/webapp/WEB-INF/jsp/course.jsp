@@ -5,12 +5,12 @@
 <html lang="en">
 <head>
     <title>User Managment System</title>
-    <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <link rel="stylesheet" type="text/css" href="/css/style.css">
-    <script language="javascript" src="/js/course.js" type="text/javascript"></script>
+    <script language="javascript" src="/js/jquery.js" type="text/javascript"></script>
     <script language="javascript" src="/js/bootstrap-dropdown.js" type="text/javascript"></script>
-    <link href="/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <script language="javascript" src="/js/course.js" type="text/javascript"></script>
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+
 </head>
 <body>
 

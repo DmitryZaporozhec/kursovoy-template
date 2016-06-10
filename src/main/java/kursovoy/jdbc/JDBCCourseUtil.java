@@ -39,7 +39,7 @@ public class JDBCCourseUtil {
             String sql;
             if (u.getId() == 0) {
                 sql = "INSERT INTO COURSE(DISCIPLINE_ID,USER_ID,NAME,DESCRIPTION,CREATE_DATE) VALUES (?,?,?,?,?)";
-                stmt = conn.prepareStatement(sql);
+                stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
                 stmt.setInt(1, u.getDisciplineId());
                 stmt.setInt(2, u.getUserId());
                 stmt.setString(3, u.getName());
@@ -148,6 +148,7 @@ public class JDBCCourseUtil {
             if (attrName != null && attrVal != null) {
                 sql = sql + " WHERE " + attrName + "='" + attrVal + "'";
             }
+            sql += " ORDER BY c.NAME";
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {
                 Course u = new Course();

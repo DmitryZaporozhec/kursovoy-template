@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt" %>
 <%@page pageEncoding="UTF-8" %>
 <html lang="en">
 <head>
@@ -44,34 +45,42 @@
                         <label for="lastName">Фамилия</label>
                         <input id="lastName" type="text" value="${user.lastName}">
                     </div>
-                    <div class="form-row">
-                        <label for="userType">Тип пользователя</label>
-                        <select name="userType" id="userType">
-                            <c:forEach items="${userTypes}" var="item">
-                                <option value="${item}" <c:if test="${user.userType eq item}">
-                                    selected="selected"
-                                </c:if> >${item}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
-                    <div class="form-row">
-                        <label for="groupId">Группа</label>
-                        <select name="groupId" id="groupId">
-                            <option value="">выбрать...</option>
-                            <c:forEach items="${groups}" var="item">
-                                <option value="${item.id}" <c:if test="${user.groupId eq item.id}">
-                                    selected="selected"
-                                </c:if> >${item.name}</option>
-                            </c:forEach>
-                        </select>
-                    </div>
+                    <c:if test="${!('Y' eq reader )}">
+                        <div class="form-row">
+                            <label for="userType">Тип пользователя</label>
+                            <select name="userType" id="userType"
+                                    <c:if test="${user.userId!=0}">disabled="disabled"</c:if> >
+                                <c:forEach items="${userTypes}" var="item">
+                                    <option value="${item}" <c:if test="${user.userType eq item}">
+                                        selected="selected"
+                                    </c:if> ><fmt:message key="com.edu.${item}"/></option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                        <div class="form-row">
+                            <label for="groupId">Группа</label>
+                            <select name="groupId" id="groupId"
+                                    <c:if test="${!(CURRENT_USER_TYPE eq 'ADMIN')}">disabled="disabled"</c:if>
+
+                            >
+                                <option value="">выбрать...</option>
+                                <c:forEach items="${groups}" var="item">
+                                    <option value="${item.id}" <c:if test="${user.groupId eq item.id}">
+                                        selected="selected"
+                                    </c:if> >${item.name}</option>
+                                </c:forEach>
+                            </select>
+                        </div>
+                    </c:if>
                     <div class="form-row">
                         <label for="password">Пароль</label>
                         <input id="password" type="password" value="${user.password}">
                     </div>
                     <div class="form-row control">
                         <button type="submit" class="btn btn-primary">Сохранить</button>
-                        <a class="btn btn-danger" href="/delete?userId=${user.userId}">Удалить</a>
+                        <c:if test="${!('Y' eq reader )}">
+                            <a class="btn btn-danger" href="/delete?userId=${user.userId}">Удалить</a>
+                        </c:if>
                     </div>
                 </fieldset>
             </form>
