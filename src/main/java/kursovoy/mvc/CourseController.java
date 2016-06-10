@@ -24,6 +24,15 @@ public class CourseController extends BaseMenuController {
         return "courses";
     }
 
+    @RequestMapping(value = "/my/list", method = RequestMethod.GET)
+    public String getMy(HttpServletRequest request, Model model) {
+        String userId = CookieUtil.getCurrentUserId(request);
+        List<Course> courses = new JDBCUserCourseUtil().get(Integer.parseInt(userId));
+        model.addAttribute("courses", courses);
+        model.addAttribute("my", "Y");
+        return "courses";
+    }
+
     @RequestMapping(value = "/get", method = RequestMethod.GET)
     public String getUser(Model model, @RequestParam(value = "id", required = false) final String id) {
         Course d = new Course();
@@ -90,6 +99,20 @@ public class CourseController extends BaseMenuController {
             new JDBCModuleUtil().saveModule(m);
         }
         return "redirect:/course/get?id=" + id;
+    }
+
+    @RequestMapping(value = "/add-to-my/{id}", method = RequestMethod.GET)
+    public String addToList(HttpServletRequest request, Model model, @PathVariable("id") String id) {
+        String userId = CookieUtil.getCurrentUserId(request);
+        new JDBCUserCourseUtil().save(Integer.parseInt(userId), Integer.parseInt(id));
+        return "redirect:/course/list";
+    }
+
+    @RequestMapping(value = "/delete-from-my/{id}", method = RequestMethod.GET)
+    public String deleteFromList(HttpServletRequest request, Model model, @PathVariable("id") String id) {
+        String userId = CookieUtil.getCurrentUserId(request);
+        new JDBCUserCourseUtil().delete(Integer.parseInt(userId), Integer.parseInt(id));
+        return "redirect:/course/my/list";
     }
 
     @RequestMapping(value = "/deleteModule", method = RequestMethod.GET)

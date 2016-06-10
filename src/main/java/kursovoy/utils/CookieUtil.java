@@ -13,7 +13,10 @@ import java.util.List;
  */
 public class CookieUtil {
 
+    public static String userName;
+    public static String password;
     public final static String MY_COOKIE_NAME = "KursovoiCookie";
+
 
     public static User getCurrentUser(HttpServletRequest request) {
         User result = null;
@@ -45,5 +48,21 @@ public class CookieUtil {
             }
         }
         return result;
+    }
+
+    public static String getUserName() {
+        return userName;
+    }
+
+    public static void setUserName(String userName) {
+        CookieUtil.userName = userName;
+    }
+
+    public static String getPassword() {
+        return password;
+    }
+
+    public static void setPassword(String password) {
+        CookieUtil.password = password;
     }
 }

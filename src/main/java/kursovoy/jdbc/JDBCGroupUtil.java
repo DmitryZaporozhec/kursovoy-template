@@ -2,6 +2,7 @@ package kursovoy.jdbc;
 
 import kursovoy.model.Course;
 import kursovoy.model.Group;
+import kursovoy.utils.CookieUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import java.util.List;
 public class JDBCGroupUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
-    final static String userName = "root";
-    final static String password = "root";
+    final static String userName = CookieUtil.getUserName();;
+    final static String password = CookieUtil.getPassword();
 
     public List<Group> getAll() {
         return get(null, null);

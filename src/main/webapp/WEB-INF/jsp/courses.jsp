@@ -20,13 +20,15 @@
             </c:if>
         </div>
         <div class="col-sm-10">
-            <h3>Список курсов</h3>
+            <h3>Список <c:if  test="${'Y' eq my}"> моих</c:if> курсов</h3>
             <table class="table">
                 <thead>
                 <tr>
                     <th>Название</th>
                     <th>Описание</th>
-                    <th>Создатель</th>
+                    <c:if test="${not('Y'  eq my)}">
+                        <th>Создатель</th>
+                    </c:if>
                     <th>Дисциплина</th>
                     <th>Обновлено</th>
                     <th>Действия</th>
@@ -36,20 +38,40 @@
                     <tr>
                         <td>${course.name} </td>
                         <td>${course.description} </td>
-                        <td>${course.userDisplayName} </td>
+                        <c:if test="${not('Y'  eq my)}">
+                            <td>${course.userDisplayName} </td>
+                        </c:if>
                         <td>${course.disciplineName} </td>
                         <td><fmt:formatDate pattern="yyyy MM dd HH:mm"
                                             value="${course.createDate}"/></td>
-                        <td>
-                            <c:if test="${CURRENT_USER_TYPE eq 'ADMIN' or CURRENT_USER_TYPE eq  'LECTURER' or CURRENT_USER_TYPE eq  'TUTOR'}">
-                                <a href="/course/get?id=${course.id}"><i
-                                        class="glyphicon glyphicon-edit"></i></a>
-                                <c:if test="${CURRENT_USER_TYPE eq 'ADMIN'}">
-                                    <a href="/course/delete?id=${course.id}"><i
-                                            class="glyphicon glyphicon-remove"></i></a>
-                                </c:if>
-                            </c:if>
-                        </td>
+                        <c:choose>
+                            <c:when test="${'Y' eq my}">
+                                <td>
+                                    <a href="#"><i
+                                            class="glyphicon glyphicon-picture"></i></a>
+                                    <%--<a href="/course/delete-from-my/${course.id}"><i--%>
+                                            <%--class="glyphicon glyphicon-remove"></i></a>--%>
+                                </td>
+                            </c:when>
+                            <c:otherwise>
+                                <td>
+                                    <a href="#"><i
+                                            class="glyphicon glyphicon-picture"></i></a>
+                                    <c:if test="${CURRENT_USER_TYPE eq 'ADMIN' or CURRENT_USER_TYPE eq  'LECTURER' or CURRENT_USER_TYPE eq  'TUTOR'}">
+                                        <a href="/course/get?id=${course.id}"><i
+                                                class="glyphicon glyphicon-edit"></i></a>
+                                    </c:if>
+                                    <c:if test="${CURRENT_USER_TYPE eq 'ADMIN'}">
+                                        <a href="/course/delete?id=${course.id}"><i
+                                                class="glyphicon glyphicon-remove"></i></a>
+                                    </c:if>
+                                    <%--<c:if test="${CURRENT_USER_TYPE eq 'STUDENT'}">--%>
+                                        <%--<a href="/course/add-to-my/${course.id}"><i--%>
+                                                <%--class="glyphicon glyphicon-check"></i></a>--%>
+                                    <%--</c:if>--%>
+                                </td>
+                            </c:otherwise>
+                        </c:choose>
                     </tr>
                 </c:forEach>
             </table>

@@ -3,6 +3,7 @@ package kursovoy.jdbc;
 import kursovoy.constants.UserType;
 import kursovoy.model.Course;
 import kursovoy.model.User;
+import kursovoy.utils.CookieUtil;
 
 import java.sql.*;
 import java.util.*;
@@ -14,8 +15,8 @@ import java.util.Date;
 public class JDBCCourseUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
-    final static String userName = "root";
-    final static String password = "root";
+    final static String userName = CookieUtil.getUserName();
+    final static String password = CookieUtil.getPassword();
 
     public List<Course> getAllCoursed() {
         return getCourse(null, null);

@@ -2,6 +2,7 @@ package kursovoy.jdbc;
 
 import kursovoy.constants.UserType;
 import kursovoy.model.User;
+import kursovoy.utils.CookieUtil;
 import org.springframework.beans.factory.annotation.Value;
 
 import java.sql.*;
@@ -13,8 +14,8 @@ import java.util.*;
 public class JDBCUserUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
-    final static String userName = "root";
-    final static String password = "root";
+    final static String userName = CookieUtil.getUserName();
+    final static String password = CookieUtil.getPassword();
 
     public List<User> getAllUsers() {
         return getUser(null, null);
@@ -127,9 +128,9 @@ public class JDBCUserUtil {
             Class.forName(jdbcDriver);
             conn = DriverManager.getConnection(connectionString, userName, password);
             stmt = conn.createStatement();
-            String sql="SELECT u.*, g.NAME as 'grpName' FROM USERS u JOIN KURSOVOY.GROUP g ON g.ID = u.GROUP_ID";
+            String sql = "SELECT u.*, g.NAME as 'grpName' FROM USERS u JOIN KURSOVOY.GROUP g ON g.ID = u.GROUP_ID";
             if (attrName != null && attrVal != null) {
-                sql = sql+ " WHERE " + attrName + "='" + attrVal + "'";
+                sql = sql + " WHERE " + attrName + "='" + attrVal + "'";
             }
             ResultSet rs = stmt.executeQuery(sql);
             while (rs.next()) {

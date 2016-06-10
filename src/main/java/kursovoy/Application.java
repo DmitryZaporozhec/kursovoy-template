@@ -1,8 +1,10 @@
 package kursovoy;
 
 import kursovoy.filter.KursovoyFilter;
+import kursovoy.utils.CookieUtil;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.web.DispatcherServletAutoConfiguration;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.context.embedded.ServletRegistrationBean;
@@ -16,6 +18,7 @@ import javax.servlet.Filter;
 
 @ComponentScan
 @EnableAutoConfiguration
+@SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
     @Override
@@ -37,7 +40,8 @@ public class Application extends SpringBootServletInitializer {
     }
 
     public static void main(String[] args) {
+        CookieUtil.setPassword("root");
+        CookieUtil.setUserName("root");
         SpringApplication.run(Application.class, args);
     }
-
 }

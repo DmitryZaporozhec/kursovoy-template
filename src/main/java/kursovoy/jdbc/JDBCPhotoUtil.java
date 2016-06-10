@@ -4,6 +4,7 @@ import kursovoy.constants.UserType;
 import kursovoy.model.Course;
 import kursovoy.model.Photo;
 import kursovoy.model.User;
+import kursovoy.utils.CookieUtil;
 
 import java.io.InputStream;
 import java.sql.*;
@@ -16,8 +17,8 @@ import java.util.List;
 public class JDBCPhotoUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
-    final static String userName = "root";
-    final static String password = "root";
+    final static String userName = CookieUtil.getUserName();;
+    final static String password = CookieUtil.getPassword();
 
     public Photo save(Photo u) {
         Connection conn = null;

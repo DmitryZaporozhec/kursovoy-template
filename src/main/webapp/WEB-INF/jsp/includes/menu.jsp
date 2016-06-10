@@ -61,6 +61,9 @@
                 <li><a href="/course/get">Создать курс</a></li>
             </c:if>
                 <li><a href="/course/list">Список курсов</a></li>
+                <c:if test="${CURRENT_USER_TYPE eq 'STUDENT'}">
+                    <li><a href="/course/my/list">Мои курсы</a></li>
+                </c:if>
 
             </ul>
         </li>

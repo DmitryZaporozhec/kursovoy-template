@@ -2,6 +2,7 @@ package kursovoy.jdbc;
 
 import kursovoy.constants.ContentType;
 import kursovoy.model.FroalaModel;
+import kursovoy.utils.CookieUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,8 +14,8 @@ import java.util.List;
 public class JDBCContentUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
-    final static String userName = "root";
-    final static String password = "root";
+    final static String userName = CookieUtil.getUserName();
+    final static String password = CookieUtil.getPassword();
 
     public List<FroalaModel> getAll() {
         return get(null, null);

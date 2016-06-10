@@ -3,6 +3,7 @@ package kursovoy.jdbc;
 import kursovoy.model.Course;
 import kursovoy.model.FroalaModel;
 import kursovoy.model.Module;
+import kursovoy.utils.CookieUtil;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -15,8 +16,8 @@ import java.util.List;
 public class JDBCModuleUtil {
     final static String jdbcDriver = "com.mysql.jdbc.Driver";
     final static String connectionString = "jdbc:mysql://localhost/KURSOVOY?useUnicode=yes&characterEncoding=UTF-8";
-    final static String userName = "root";
-    final static String password = "root";
+    final static String userName = CookieUtil.getUserName();;
+    final static String password = CookieUtil.getPassword();
 
     public List<Module> getAllModules() {
         return getModule(null, null);
