@@ -15,19 +15,28 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.web.filter.CharacterEncodingFilter;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.ViewResolver;
+import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
+import org.springframework.web.servlet.view.InternalResourceViewResolver;
 
 import javax.servlet.Filter;
 import java.util.Locale;
 
-@ComponentScan
-@EnableAutoConfiguration
 @SpringBootApplication
 public class Application extends SpringBootServletInitializer {
 
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder application) {
         return application.sources(Application.class);
+    }
+
+    @Bean
+    public ViewResolver getViewResolver() {
+        InternalResourceViewResolver resolver = new InternalResourceViewResolver();
+        resolver.setPrefix("/WEB-INF/jsp/");
+        resolver.setSuffix(".jsp");
+        return resolver;
     }
 
     @Bean
@@ -49,6 +58,7 @@ public class Application extends SpringBootServletInitializer {
         slr.setDefaultLocale(Locale.US);
         return slr;
     }
+
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
         ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();

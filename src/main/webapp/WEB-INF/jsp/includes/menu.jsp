@@ -3,7 +3,7 @@
 <c:if test="${!('Y' eq reader )}">
     <div id="menu" class="navbar">
         <ul class="nav">
-            <li><a href="/index"><span class="glyphicon glyphicon-home"></span><span class="span-text">Домой</span></a></li>
+            <li><a href="/index"><span class="glyphicon glyphicon-home"></span><span class="span-text">На главную</span></a></li>
             <c:if test="${CURRENT_USER_TYPE eq 'ADMIN' or CURRENT_USER_TYPE eq  'LECTURER' or CURRENT_USER_TYPE eq  'TUTOR'}">
                 <li role="presentation" class="dropdown">
                     <a class="dropdown-toggle" data-toggle="dropdown" href="#" role="button" aria-haspopup="true"

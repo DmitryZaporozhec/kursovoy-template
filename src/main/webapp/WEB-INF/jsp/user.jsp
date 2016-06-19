@@ -49,7 +49,7 @@
                         <div class="form-row">
                             <label for="userType">Тип пользователя</label>
                             <select name="userType" id="userType"
-                                    <c:if test="${user.userId!=0}">disabled="disabled"</c:if> >
+                                    <c:if test="${!(CURRENT_USER_TYPE eq 'ADMIN')}">disabled="disabled"</c:if> >
                                 <c:forEach items="${userTypes}" var="item">
                                     <option value="${item}" <c:if test="${user.userType eq item}">
                                         selected="selected"
